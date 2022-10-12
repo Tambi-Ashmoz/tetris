@@ -1,0 +1,43 @@
+.box {
+	width: 100%;
+	height: 100%;
+	border-radius: 20%;
+	border: solid 1px #888;
+	box-sizing: border-box;
+}
+
+.box-empty {
+	background: linear-gradient(45deg, #eee 0%, #aaa 100%);
+}
+
+.box-red {
+	background: linear-gradient(45deg, #f00 0%, #f0a 100%);
+}
+
+.box-green {
+	background: linear-gradient(45deg, #0f0 0%, #0fa 100%);
+}
+
+.box-blue {
+	background: linear-gradient(45deg, #00f 0%, #0af 100%);
+}
+
+.box-yellow {
+	background: linear-gradient(45deg, #ff0 0%, #fa0 100%);
+}
+
+.box-purple {
+	background: linear-gradient(45deg, #f0f 0%, #faf 100%);
+}
+
+.box-brown {
+	background: linear-gradient(45deg, #fa0 0%, #f80 100%);
+}
+
+.box-cyan {
+	background: linear-gradient(45deg, #0ff 0%, #0af 100%);
+}
+
+.box-grey {
+	background: linear-gradient(45deg, #333 0%, #888 100%);
+}

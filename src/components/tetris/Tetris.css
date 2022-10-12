@@ -1,0 +1,22 @@
+.board {
+	width: 15em;
+	height: 25em;
+}
+
+.control-buttons {
+	width: 8em;
+	height: 8em;
+}
+
+.next {
+	width: 4em;
+	height: 4em;
+}
+
+.btn-new_game {
+	width: 6em;
+	height: 2em;
+	position: absolute;
+	left: calc(15em / 2 - 6em / 2);
+	top: calc(25em / 2);
+}
