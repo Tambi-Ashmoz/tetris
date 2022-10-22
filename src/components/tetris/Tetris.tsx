@@ -6,6 +6,8 @@ import Next from "./components/next/Next";
 import usePolling from "./hooks/UsePolling";
 import "./Tetris.css";
 import {
+	addBoardLinesFromEnd,
+	generateRandomLines,
 	getBoardFullLines,
 	getBoardMiddle,
 	getRandomPieceNumber,
@@ -17,7 +19,10 @@ import {
 	rotatePieceToLeft,
 } from "./Tetris.logic";
 
-interface Props {}
+interface Props {
+	setLinesCompleted: any;
+	linesToAddFromEnd: number[][];
+}
 
 const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	const [board, setBoard] = useState(initialBoard);
@@ -47,6 +52,30 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	usePolling(() => {
 		onClickDown();
 	}, pollingTime);
+
+	useEffect(() => {
+		if (isGameOver === false && props.linesToAddFromEnd.length > 0) {
+			const newLinesWithEmptySpots = generateRandomLines(
+				board,
+				props.linesToAddFromEnd.length
+			);
+
+			const newBoardWithLines = addBoardLinesFromEnd(
+				board,
+				newLinesWithEmptySpots
+			);
+
+			const newBoard = putPieceOnBoard(
+				newBoardWithLines,
+				pieceSlide,
+				pieceSlideX,
+				pieceSlideY
+			);
+
+			setBoard(newBoardWithLines);
+			setBoardToDisplay(newBoard);
+		}
+	}, [props.linesToAddFromEnd]);
 
 	const setPieceXY = (x: number, y: number) => {
 		if (isCanPutPieceOnBoard(board, pieceSlide, x, y) == true) {
@@ -134,6 +163,11 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 
 			//generate new random next piece
 			setPieceNext(pieces[getRandomPieceNumber()]);
+
+			//update parent with deleted fullLines
+			if (fullLines.length > 0) {
+				props.setLinesCompleted(fullLines);
+			}
 		}
 	};
 
