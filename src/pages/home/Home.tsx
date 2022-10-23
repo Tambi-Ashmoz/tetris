@@ -27,6 +27,7 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
 						<Tetris
 							onLineComplete={setTetrisALinesCompleted}
 							linesToAddFromEnd={tetrisBLinesCompleted}
+							gameState={gameState}
 							setGameState={setGameState}
 						/>
 					</div>
@@ -34,15 +35,14 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
 						<Tetris
 							onLineComplete={setTetrisBLinesCompleted}
 							linesToAddFromEnd={tetrisALinesCompleted}
+							gameState={gameState}
 							setGameState={setGameState}
 						/>
 					</div>
 				</div>
 				<div className="row">
 					<div className="col hor-align-center margin-top-1">
-						<div className="game-over">
-							{gameState === GameState.GAME_OVER ? "Game Over" : ""}
-						</div>
+						<h3>{gameState === GameState.GAME_OVER ? "Game Over" : ""}</h3>
 					</div>
 				</div>
 				<div className="row">

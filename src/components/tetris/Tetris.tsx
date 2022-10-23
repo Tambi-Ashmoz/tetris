@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Board from "./components/board/Board";
 import Controls from "./components/controls/Controls";
 import Lines from "./components/lines/Lines";
@@ -28,18 +28,19 @@ export enum GameState {
 interface Props {
 	onLineComplete: any;
 	linesToAddFromEnd: number[][];
-	setGameState: (gameState: GameState) => void;
+	gameState: GameState;
+	setGameState: Dispatch<SetStateAction<GameState>>;
 }
 
 const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	const [board, setBoard] = useState(initialBoard);
 	const [boardToDisplay, setBoardToDisplay] = useState(initialBoard);
 
-	const [pieceSlide, setPieceSlide] = useState(pieces[getRandomPieceNumber()]);
+	const [pieceSlide, setPieceSlide] = useState([]);
 	const [pieceSlideX, setPieceSlideX] = useState(getBoardMiddle(board));
 	const [pieceSlideY, setPieceSlideY] = useState(0);
 
-	const [pieceNext, setPieceNext] = useState(pieces[getRandomPieceNumber()]);
+	const [pieceNext, setPieceNext] = useState([]);
 
 	const [isGameOver, setIsGameOver] = useState(false);
 	const [completedLinesAmount, setCompletedLinesAmount] = useState(0);
@@ -47,12 +48,9 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	const [pollingTime, setPollingTime] = useState(0);
 
 	useEffect(() => {
-		startNewGame();
-	}, []);
-
-	useEffect(() => {
 		if (isGameOver == true) {
 			setPollingTime(0);
+			props.setGameState(GameState.GAME_OVER);
 		}
 	}, [isGameOver]);
 
@@ -84,6 +82,22 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 		}
 	}, [props.linesToAddFromEnd]);
 
+	useEffect(() => {
+		switch (props.gameState) {
+			case GameState.NEW_GAME:
+				startNewGame();
+				break;
+
+			case GameState.PLAYING:
+				setPollingTime(1000);
+				break;
+
+			case GameState.GAME_OVER:
+				setIsGameOver(true);
+				break;
+		}
+	}, [props.gameState]);
+
 	const setPieceXY = (x: number, y: number) => {
 		if (isCanPutPieceOnBoard(board, pieceSlide, x, y) == true) {
 			setPieceSlideX(x);
@@ -95,14 +109,26 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	};
 
 	const onClickLeft = () => {
+		if (isGameOver == true) {
+			return;
+		}
+
 		setPieceXY(pieceSlideX - 1, pieceSlideY);
 	};
 
 	const onClickRight = () => {
+		if (isGameOver == true) {
+			return;
+		}
+
 		setPieceXY(pieceSlideX + 1, pieceSlideY);
 	};
 
 	const onClickUp = () => {
+		if (isGameOver == true) {
+			return;
+		}
+
 		const newPiece = rotatePieceToLeft(pieceSlide);
 
 		if (
@@ -121,6 +147,10 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	};
 
 	const onClickDown = () => {
+		if (isGameOver == true) {
+			return;
+		}
+
 		if (
 			isCanPutPieceOnBoard(board, pieceSlide, pieceSlideX, pieceSlideY + 1) ===
 			true
@@ -218,9 +248,7 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 			<div className="mat">
 				<div className="row">
 					<div className="col">
-						<h3>
-							Tetris {isGameOver ? "- Game Over !" : ""} {isGameOver ? "" : ""}{" "}
-						</h3>
+						<h3>Tetris</h3>
 					</div>
 				</div>
 				<div className="row">
