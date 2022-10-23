@@ -19,9 +19,16 @@ import {
 	rotatePieceToLeft,
 } from "./Tetris.logic";
 
+export enum GameState {
+	NEW_GAME,
+	PLAYING,
+	GAME_OVER,
+}
+
 interface Props {
-	setLinesCompleted: any;
+	onLineComplete: any;
 	linesToAddFromEnd: number[][];
+	setGameState: (gameState: GameState) => void;
 }
 
 const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
@@ -166,7 +173,7 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 
 			//update parent with deleted fullLines
 			if (fullLines.length > 0) {
-				props.setLinesCompleted(fullLines);
+				props.onLineComplete(fullLines);
 			}
 		}
 	};
@@ -219,13 +226,6 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 				<div className="row">
 					<div className="col">
 						<Board boardToDisplay={boardToDisplay} />
-						{isGameOver ? (
-							<div className="btn btn-new_game" onClick={startNewGame}>
-								New Game
-							</div>
-						) : (
-							""
-						)}
 					</div>
 					<div className="col margin-left-1 margin-right-1">
 						<div className="mat">

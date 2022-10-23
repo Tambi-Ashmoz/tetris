@@ -45,6 +45,10 @@ body {
 	margin-bottom: 0em;
 }
 
+.margin-1 {
+	margin: 0em;
+}
+
 .margin-left-1 {
 	margin-left: 1em;
 }
@@ -83,30 +87,4 @@ body {
 
 .ver-align-right {
 	align-items: end;
-}
-
-.btn {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	outline: none;
-	cursor: pointer;
-	background-image: linear-gradient(to top, #d8d9db 0%, #fff 80%, #fdfdfd 100%);
-	border-radius: 100em;
-	border: 1px solid #8f9092;
-	box-shadow: 0 4px 3px 1px #fcfcfc, 0 6px 8px #d6d7d9, 0 -4px 4px #cecfd1,
-		0 -6px 4px #fefefe, inset 0 0 3px 0 #cecfd1;
-	color: #606060;
-	text-shadow: 0 1px #fff;
-	transition: all 0.2s ease;
-}
-
-.btn:active {
-	box-shadow: 0 4px 3px 1px #fcfcfc, 0 6px 8px #d6d7d9, 0 -4px 4px #cecfd1,
-		0 -6px 4px #fefefe, inset 0 0 5px 3px #999, inset 0 0 30px #aaa;
-}
-
-.btn:disabled {
-	opacity: 0.6;
-	cursor: not-allowed;
 }
