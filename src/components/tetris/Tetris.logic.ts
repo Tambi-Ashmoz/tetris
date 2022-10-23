@@ -18,6 +18,11 @@ export const initialBoard = [
 
 export const pieces = [
 	[
+		[0, 0, 0],
+		[0, 0, 0],
+		[0, 0, 0],
+	],
+	[
 		[1, 1],
 		[1, 1],
 	],
@@ -59,7 +64,7 @@ export const getRandomNumber = (min: number, max: number) => {
 }
 
 export const getRandomPieceNumber = () => {
-	const min = 0;
+	const min = 1;
 	const max = pieces.length - 1;
 	return getRandomNumber(min, max);
 }

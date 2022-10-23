@@ -20,8 +20,9 @@ import {
 } from "./Tetris.logic";
 
 export enum GameState {
-	NEW_GAME,
-	PLAYING,
+	RESET,
+	PLAY,
+	PAUSE,
 	GAME_OVER,
 }
 
@@ -36,11 +37,11 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	const [board, setBoard] = useState(initialBoard);
 	const [boardToDisplay, setBoardToDisplay] = useState(initialBoard);
 
-	const [pieceSlide, setPieceSlide] = useState([]);
+	const [pieceSlide, setPieceSlide] = useState(pieces[0]);
 	const [pieceSlideX, setPieceSlideX] = useState(getBoardMiddle(board));
 	const [pieceSlideY, setPieceSlideY] = useState(0);
 
-	const [pieceNext, setPieceNext] = useState([]);
+	const [pieceNext, setPieceNext] = useState(pieces[0]);
 
 	const [isGameOver, setIsGameOver] = useState(false);
 	const [completedLinesAmount, setCompletedLinesAmount] = useState(0);
@@ -84,12 +85,16 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 
 	useEffect(() => {
 		switch (props.gameState) {
-			case GameState.NEW_GAME:
-				startNewGame();
+			case GameState.RESET:
+				resetGame();
 				break;
 
-			case GameState.PLAYING:
+			case GameState.PLAY:
 				setPollingTime(1000);
+				break;
+
+			case GameState.PAUSE:
+				setPollingTime(0);
 				break;
 
 			case GameState.GAME_OVER:
@@ -109,7 +114,7 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	};
 
 	const onClickLeft = () => {
-		if (isGameOver == true) {
+		if (pollingTime == 0) {
 			return;
 		}
 
@@ -117,7 +122,7 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	};
 
 	const onClickRight = () => {
-		if (isGameOver == true) {
+		if (pollingTime == 0) {
 			return;
 		}
 
@@ -125,7 +130,7 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	};
 
 	const onClickUp = () => {
-		if (isGameOver == true) {
+		if (pollingTime == 0) {
 			return;
 		}
 
@@ -147,7 +152,7 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	};
 
 	const onClickDown = () => {
-		if (isGameOver == true) {
+		if (pollingTime == 0) {
 			return;
 		}
 
@@ -208,7 +213,7 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 		}
 	};
 
-	const startNewGame = () => {
+	const resetGame = () => {
 		const newBoard = initialBoard;
 
 		const newPieceSlide = pieces[getRandomPieceNumber()];
@@ -239,8 +244,6 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 		);
 
 		setBoardToDisplay(newBoardToDisplay);
-
-		setPollingTime(1000);
 	};
 
 	return (

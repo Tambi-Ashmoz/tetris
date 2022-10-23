@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../../components/button/Button";
 import Tetris, { GameState } from "../../components/tetris/Tetris";
 
@@ -13,11 +13,47 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
 		number[][]
 	>([]);
 
-	const [gameState, setGameState] = useState<GameState>(GameState.GAME_OVER);
+	const [tetrisAGameState, setTettrisAGameState] = useState<GameState>(
+		GameState.RESET
+	);
+
+	const [tetrisBGameState, setTettrisBGameState] = useState<GameState>(
+		GameState.RESET
+	);
+
+	const [winner, setWinner] = useState<number>(-1);
 
 	const startNewGame = () => {
-		setGameState(GameState.NEW_GAME);
+		setWinner(0);
+
+		setTettrisAGameState(GameState.RESET);
+		setTettrisBGameState(GameState.RESET);
 	};
+
+	useEffect(() => {
+		if (winner == 0) {
+			setTettrisAGameState(GameState.PLAY);
+			setTettrisBGameState(GameState.PLAY);
+		}
+	}, [winner]);
+
+	useEffect(() => {
+		if (tetrisAGameState == GameState.GAME_OVER) {
+			setWinner(2);
+
+			setTettrisAGameState(GameState.PAUSE);
+			setTettrisBGameState(GameState.PAUSE);
+		}
+	}, [tetrisAGameState]);
+
+	useEffect(() => {
+		if (tetrisBGameState == GameState.GAME_OVER) {
+			setWinner(1);
+
+			setTettrisAGameState(GameState.PAUSE);
+			setTettrisBGameState(GameState.PAUSE);
+		}
+	}, [tetrisBGameState]);
 
 	return (
 		<>
@@ -27,31 +63,35 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
 						<Tetris
 							onLineComplete={setTetrisALinesCompleted}
 							linesToAddFromEnd={tetrisBLinesCompleted}
-							gameState={gameState}
-							setGameState={setGameState}
+							gameState={tetrisAGameState}
+							setGameState={setTettrisAGameState}
 						/>
 					</div>
 					<div id="2" className="col">
 						<Tetris
 							onLineComplete={setTetrisBLinesCompleted}
 							linesToAddFromEnd={tetrisALinesCompleted}
-							gameState={gameState}
-							setGameState={setGameState}
+							gameState={tetrisBGameState}
+							setGameState={setTettrisBGameState}
 						/>
 					</div>
 				</div>
 				<div className="row">
 					<div className="col hor-align-center margin-top-1">
-						<h3>{gameState === GameState.GAME_OVER ? "Game Over" : ""}</h3>
+						<h3>{winner != 0 ? "Game Over" : ""}</h3>
 					</div>
 				</div>
 				<div className="row">
 					<div className="col hor-align-center margin-top-1">
-						{gameState === GameState.GAME_OVER ? (
-							<Button onClick={startNewGame}>Start</Button>
-						) : (
-							""
-						)}
+						<h3>
+							{winner == 1 ? "Player 1 Wins!" : ""}
+							{winner == 2 ? "Player 2 Wins!" : ""}
+						</h3>
+					</div>
+				</div>
+				<div className="row">
+					<div className="col hor-align-center margin-top-1">
+						{winner != 0 ? <Button onClick={startNewGame}>Start</Button> : ""}
 					</div>
 				</div>
 			</div>
