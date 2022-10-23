@@ -6,7 +6,7 @@ interface Props {
 	children: React.ReactNode;
 }
 
-const Button: React.FC<Props> = (props: Props): JSX.Element => {
+export default (props: Props): JSX.Element => {
 	return (
 		<>
 			<div className="btn padding-1" onClick={props.onClick}>
@@ -15,5 +15,3 @@ const Button: React.FC<Props> = (props: Props): JSX.Element => {
 		</>
 	);
 };
-
-export default Button;
