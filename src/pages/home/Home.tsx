@@ -7,6 +7,7 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	const [tetrisALinesCompleted, setTetrisALinesCompleted] = useState<
 		number[][]
 	>([]);
+
 	const [tetrisBLinesCompleted, setTetrisBLinesCompleted] = useState<
 		number[][]
 	>([]);
