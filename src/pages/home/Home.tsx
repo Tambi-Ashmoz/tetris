@@ -1,10 +1,46 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Button from "../../components/button/Button";
 import Tetris, { GameState } from "../../components/tetris/Tetris";
+
+interface GameReducerState {
+	playerSide: 0;
+	winner: 0;
+}
+
+enum GameReducterActions {
+	SELECTING_PLAYERS,
+	WAITING_TO_START_GAME,
+	PLAYING_GAME,
+	GAME_OVER,
+}
+
+const gameReducer = (
+	state: GameReducerState,
+	action: { type: GameReducterActions; value: any }
+): any => {
+	switch (action.type) {
+		case GameReducterActions.SELECTING_PLAYERS:
+			return { ...state, playerSide: action.value };
+
+		case GameReducterActions.WAITING_TO_START_GAME:
+			return { ...state };
+
+		case GameReducterActions.PLAYING_GAME:
+			return { ...state };
+
+		case GameReducterActions.GAME_OVER:
+			return { ...state };
+
+		default:
+			return state;
+	}
+};
 
 interface Props {}
 
 const Home: React.FC<Props> = (props: Props): JSX.Element => {
+	const [gameState, gameDispatch] = useReducer(gameReducer, { a: 0 });
+
 	const [tetrisALinesCompleted, setTetrisALinesCompleted] = useState<
 		number[][]
 	>([]);
