@@ -3,8 +3,8 @@ import Button from "../../components/button/Button";
 import Tetris, { GameState } from "../../components/tetris/Tetris";
 
 interface GameReducerState {
-	playerSide: 0;
-	winner: 0;
+	playerSide: number;
+	winner: number;
 }
 
 enum GameReducterActions {
