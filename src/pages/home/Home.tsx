@@ -4,8 +4,8 @@ import Tetris, { GameState } from "../../components/tetris/Tetris";
 
 interface GameReducerState {
 	playerSide: number;
-	winner: 1 | 2;
-	currentGameState: string;	
+	gameState: string;
+	winner: number;
 }
 
 enum GameReducterActions {
