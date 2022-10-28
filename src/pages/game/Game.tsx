@@ -2,13 +2,15 @@ import React, { useEffect, useReducer, useState } from "react";
 import { Button } from "../../components/button/Button";
 import { Tetris, TetrisState } from "../../components/tetris/Tetris";
 
+export type PlayerSide = 1 | 2;
+
 interface GameReducerState {
-	playerSide: number;
+	playerSide: PlayerSide;
 	gameState: string;
 	winner: number;
 }
 
-enum GameReducterActions {
+enum GameReducerActions {
 	StartingGame,
 	PlayingGame,
 	GameOver,
@@ -16,16 +18,16 @@ enum GameReducterActions {
 
 const gameReducer = (
 	state: GameReducerState,
-	action: { type: GameReducterActions; value: any }
+	action: { type: GameReducerActions; value: any }
 ): any => {
 	switch (action.type) {
-		case GameReducterActions.StartingGame:
+		case GameReducerActions.StartingGame:
 			return { ...state };
 
-		case GameReducterActions.PlayingGame:
+		case GameReducerActions.PlayingGame:
 			return { ...state };
 
-		case GameReducterActions.GameOver:
+		case GameReducerActions.GameOver:
 			return { ...state };
 
 		default:
@@ -33,7 +35,9 @@ const gameReducer = (
 	}
 };
 
-interface Props {}
+interface Props {
+	playerSide: PlayerSide;
+}
 
 export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 	const [gameState, gameDispatch] = useReducer(gameReducer, { a: 0 });
@@ -98,6 +102,7 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 							linesToAddFromEnd={tetrisBLinesCompleted}
 							state={tetrisAState}
 							setState={setTettrisAState}
+							isControlsEnabled={props.playerSide == 1}
 						/>
 					</div>
 					<div className="col">
@@ -106,6 +111,7 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 							linesToAddFromEnd={tetrisALinesCompleted}
 							state={tetrisBState}
 							setState={setTettrisBState}
+							isControlsEnabled={props.playerSide == 2}
 						/>
 					</div>
 				</div>

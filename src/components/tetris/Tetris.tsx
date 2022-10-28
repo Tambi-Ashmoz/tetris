@@ -31,6 +31,7 @@ interface Props {
 	linesToAddFromEnd: number[][];
 	state: TetrisState;
 	setState: Dispatch<SetStateAction<TetrisState>>;
+	isControlsEnabled: boolean;
 }
 
 export const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
@@ -282,12 +283,16 @@ export const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 
 							<div className="row">
 								<div className="col">
-									<Controls
-										onClickUp={onClickUp}
-										onClickLeft={onClickLeft}
-										onClickDown={onClickDown}
-										onClickRight={onClickRight}
-									/>
+									{props.isControlsEnabled == true ? (
+										<Controls
+											onClickUp={onClickUp}
+											onClickLeft={onClickLeft}
+											onClickDown={onClickDown}
+											onClickRight={onClickRight}
+										/>
+									) : (
+										<></>
+									)}
 								</div>
 							</div>
 						</div>

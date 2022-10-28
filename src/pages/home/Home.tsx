@@ -1,38 +1,50 @@
-import React, { useEffect, useState } from "react";
-import { Game } from "../game/Game";
+import React, { useEffect, useReducer } from "react";
+import { Game, PlayerSide } from "../game/Game";
 import { Init } from "../init/Init";
 
-enum PageName {
-	Init,
-	Game,
+interface GameReducerState {
+	page: JSX.Element;
+	playerSide: PlayerSide;
 }
+
+enum GameReducerActions {
+	ConnectingToServer,
+	PlayingGame,
+}
+
+const gameReducer = (
+	state: GameReducerState,
+	action:
+		| { type: GameReducerActions.ConnectingToServer }
+		| { type: GameReducerActions.PlayingGame; playerSide: PlayerSide }
+): any => {
+	switch (action.type) {
+		case GameReducerActions.ConnectingToServer:
+			return { ...state, page: <Init /> };
+
+		case GameReducerActions.PlayingGame:
+			return { ...state, page: <Game playerSide={action.playerSide} /> };
+
+		default:
+			return state;
+	}
+};
 
 interface Props {}
 
 export const Home: React.FC<Props> = (props: Props): JSX.Element => {
-	const [pageName, setPageName] = useState<PageName>(PageName.Init);
+	const [gameState, gameDispatch] = useReducer(gameReducer, {
+		page: <Init />,
+	});
 
 	useEffect(() => {
 		setTimeout(() => {
-			setPageName(PageName.Game);
+			gameDispatch({
+				type: GameReducerActions.PlayingGame,
+				playerSide: 1,
+			});
 		}, 2000);
 	}, []);
 
-	const getPage = (pageName: PageName): JSX.Element => {
-		let page: JSX.Element = <></>;
-
-		switch (pageName) {
-			case PageName.Init:
-				page = <Init />;
-				break;
-
-			case PageName.Game:
-				page = <Game />;
-				break;
-		}
-
-		return page;
-	};
-
-	return <>{getPage(pageName)}</>;
+	return <>{gameState.page}</>;
 };
