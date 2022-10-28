@@ -19,7 +19,7 @@ import {
 	rotatePieceToLeft,
 } from "./Tetris.logic";
 
-export enum State {
+export enum TetrisState {
 	RESET,
 	PLAY,
 	PAUSE,
@@ -29,8 +29,8 @@ export enum State {
 interface Props {
 	onLineComplete: any;
 	linesToAddFromEnd: number[][];
-	state: State;
-	setState: Dispatch<SetStateAction<State>>;
+	state: TetrisState;
+	setState: Dispatch<SetStateAction<TetrisState>>;
 }
 
 const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
@@ -51,7 +51,7 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	useEffect(() => {
 		if (isGameOver == true) {
 			setPollingTime(0);
-			props.setState(State.GAME_OVER);
+			props.setState(TetrisState.GAME_OVER);
 		}
 	}, [isGameOver]);
 
@@ -85,19 +85,19 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 
 	useEffect(() => {
 		switch (props.state) {
-			case State.RESET:
+			case TetrisState.RESET:
 				resetGame();
 				break;
 
-			case State.PLAY:
+			case TetrisState.PLAY:
 				setPollingTime(1000);
 				break;
 
-			case State.PAUSE:
+			case TetrisState.PAUSE:
 				setPollingTime(0);
 				break;
 
-			case State.GAME_OVER:
+			case TetrisState.GAME_OVER:
 				setIsGameOver(true);
 				break;
 		}
@@ -137,7 +137,8 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 		const newPiece = rotatePieceToLeft(pieceSlide);
 
 		if (
-			isCanPutPieceOnBoard(board, newPiece, pieceSlideX, pieceSlideY) == true
+			isCanPutPieceOnBoard(board, newPiece, pieceSlideX, pieceSlideY) ==
+			true
 		) {
 			setPieceSlide(newPiece);
 
@@ -157,8 +158,12 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 		}
 
 		if (
-			isCanPutPieceOnBoard(board, pieceSlide, pieceSlideX, pieceSlideY + 1) ===
-			true
+			isCanPutPieceOnBoard(
+				board,
+				pieceSlide,
+				pieceSlideX,
+				pieceSlideY + 1
+			) === true
 		) {
 			setPieceXY(pieceSlideX, pieceSlideY + 1);
 		} else if (pieceSlideY === 0) {
@@ -267,7 +272,11 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 							</div>
 							<div className="row">
 								<div className="col hor-align-center">
-									<Lines completedLinesAmount={completedLinesAmount} />
+									<Lines
+										completedLinesAmount={
+											completedLinesAmount
+										}
+									/>
 								</div>
 							</div>
 

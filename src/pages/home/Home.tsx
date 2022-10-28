@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import Button from "../../components/button/Button";
-import Tetris, { State as TetrisState } from "../../components/tetris/Tetris";
+import Tetris, { TetrisState } from "../../components/tetris/Tetris";
 
 interface GameReducerState {
 	playerSide: number;
