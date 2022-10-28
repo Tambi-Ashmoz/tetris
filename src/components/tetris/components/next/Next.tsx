@@ -1,11 +1,11 @@
 import React from "react";
-import Box from "../box/Box";
+import { Box } from "../box/Box";
 
 interface Props {
 	pieceNext: number[][];
 }
 
-const Next: React.FC<Props> = (props: Props): JSX.Element => {
+export const Next: React.FC<Props> = (props: Props): JSX.Element => {
 	const { pieceNext } = props;
 	return (
 		<>
@@ -34,5 +34,3 @@ const Next: React.FC<Props> = (props: Props): JSX.Element => {
 		</>
 	);
 };
-
-export default Next;

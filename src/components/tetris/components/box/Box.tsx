@@ -17,12 +17,10 @@ interface Props {
 	color: number;
 }
 
-const Box: React.FC<Props> = (props: Props): JSX.Element => {
+export const Box: React.FC<Props> = (props: Props): JSX.Element => {
 	return (
 		<>
 			<div className={`box ${colors[props.color]}`}></div>
 		</>
 	);
 };
-
-export default Box;

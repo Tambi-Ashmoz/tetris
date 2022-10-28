@@ -1,5 +1,5 @@
 import React from "react";
-import Box from "../box/Box";
+import { Box } from "../box/Box";
 
 interface Props {
 	onClickUp: () => void;
@@ -8,7 +8,7 @@ interface Props {
 	onClickRight: () => void;
 }
 
-const Controls: React.FC<Props> = (props: Props): JSX.Element => {
+export const Controls: React.FC<Props> = (props: Props): JSX.Element => {
 	const { onClickUp, onClickLeft, onClickDown, onClickRight } = props;
 	return (
 		<>
@@ -51,5 +51,3 @@ const Controls: React.FC<Props> = (props: Props): JSX.Element => {
 		</>
 	);
 };
-
-export default Controls;

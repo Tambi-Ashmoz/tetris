@@ -1,9 +1,9 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import Board from "./components/board/Board";
-import Controls from "./components/controls/Controls";
-import Lines from "./components/lines/Lines";
-import Next from "./components/next/Next";
-import usePolling from "./hooks/UsePolling";
+import { Board } from "./components/board/Board";
+import { Controls } from "./components/controls/Controls";
+import { Lines } from "./components/lines/Lines";
+import { Next } from "./components/next/Next";
+import { usePolling } from "./hooks/UsePolling";
 import "./Tetris.css";
 import {
 	addBoardLinesFromEnd,
@@ -33,7 +33,7 @@ interface Props {
 	setState: Dispatch<SetStateAction<TetrisState>>;
 }
 
-const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
+export const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	const [board, setBoard] = useState(initialBoard);
 	const [boardToDisplay, setBoardToDisplay] = useState(initialBoard);
 
@@ -297,5 +297,3 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 		</>
 	);
 };
-
-export default Tetris;

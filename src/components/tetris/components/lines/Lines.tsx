@@ -4,7 +4,7 @@ interface Props {
 	completedLinesAmount: number;
 }
 
-const Lines: React.FC<Props> = (props: Props): JSX.Element => {
+export const Lines: React.FC<Props> = (props: Props): JSX.Element => {
 	const { completedLinesAmount } = props;
 	return (
 		<>
@@ -23,5 +23,3 @@ const Lines: React.FC<Props> = (props: Props): JSX.Element => {
 		</>
 	);
 };
-
-export default Lines;

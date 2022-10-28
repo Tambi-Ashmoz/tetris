@@ -1,11 +1,11 @@
 import React from "react";
-import Box from "../box/Box";
+import { Box } from "../box/Box";
 
 interface Props {
 	boardToDisplay: number[][];
 }
 
-const Board: React.FC<Props> = (props: Props): JSX.Element => {
+export const Board: React.FC<Props> = (props: Props): JSX.Element => {
 	const { boardToDisplay } = props;
 	return (
 		<>
@@ -23,5 +23,3 @@ const Board: React.FC<Props> = (props: Props): JSX.Element => {
 		</>
 	);
 };
-
-export default Board;
