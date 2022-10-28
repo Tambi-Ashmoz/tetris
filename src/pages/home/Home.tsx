@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import Button from "../../components/button/Button";
-import Tetris, { GameState } from "../../components/tetris/Tetris";
+import Tetris, { State as TetrisState } from "../../components/tetris/Tetris";
 
 interface GameReducerState {
 	playerSide: number;
@@ -50,12 +50,12 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
 		number[][]
 	>([]);
 
-	const [tetrisAGameState, setTettrisAGameState] = useState<GameState>(
-		GameState.RESET
+	const [tetrisAState, setTettrisAState] = useState<TetrisState>(
+		TetrisState.RESET
 	);
 
-	const [tetrisBGameState, setTettrisBGameState] = useState<GameState>(
-		GameState.RESET
+	const [tetrisBState, setTettrisBState] = useState<TetrisState>(
+		TetrisState.RESET
 	);
 
 	const [winner, setWinner] = useState<number>(-1);
@@ -63,34 +63,34 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	const startNewGame = () => {
 		setWinner(0);
 
-		setTettrisAGameState(GameState.RESET);
-		setTettrisBGameState(GameState.RESET);
+		setTettrisAState(TetrisState.RESET);
+		setTettrisBState(TetrisState.RESET);
 	};
 
 	useEffect(() => {
 		if (winner == 0) {
-			setTettrisAGameState(GameState.PLAY);
-			setTettrisBGameState(GameState.PLAY);
+			setTettrisAState(TetrisState.PLAY);
+			setTettrisBState(TetrisState.PLAY);
 		}
 	}, [winner]);
 
 	useEffect(() => {
-		if (tetrisAGameState == GameState.GAME_OVER) {
+		if (tetrisAState == TetrisState.GAME_OVER) {
 			setWinner(2);
 
-			setTettrisAGameState(GameState.PAUSE);
-			setTettrisBGameState(GameState.PAUSE);
+			setTettrisAState(TetrisState.PAUSE);
+			setTettrisBState(TetrisState.PAUSE);
 		}
-	}, [tetrisAGameState]);
+	}, [tetrisAState]);
 
 	useEffect(() => {
-		if (tetrisBGameState == GameState.GAME_OVER) {
+		if (tetrisBState == TetrisState.GAME_OVER) {
 			setWinner(1);
 
-			setTettrisAGameState(GameState.PAUSE);
-			setTettrisBGameState(GameState.PAUSE);
+			setTettrisAState(TetrisState.PAUSE);
+			setTettrisBState(TetrisState.PAUSE);
 		}
-	}, [tetrisBGameState]);
+	}, [tetrisBState]);
 
 	return (
 		<>
@@ -100,16 +100,16 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
 						<Tetris
 							onLineComplete={setTetrisALinesCompleted}
 							linesToAddFromEnd={tetrisBLinesCompleted}
-							gameState={tetrisAGameState}
-							setGameState={setTettrisAGameState}
+							state={tetrisAState}
+							setState={setTettrisAState}
 						/>
 					</div>
 					<div id="2" className="col">
 						<Tetris
 							onLineComplete={setTetrisBLinesCompleted}
 							linesToAddFromEnd={tetrisALinesCompleted}
-							gameState={tetrisBGameState}
-							setGameState={setTettrisBGameState}
+							state={tetrisBState}
+							setState={setTettrisBState}
 						/>
 					</div>
 				</div>
@@ -128,7 +128,11 @@ const Home: React.FC<Props> = (props: Props): JSX.Element => {
 				</div>
 				<div className="row">
 					<div className="col hor-align-center margin-top-1">
-						{winner != 0 ? <Button onClick={startNewGame}>Start</Button> : ""}
+						{winner != 0 ? (
+							<Button onClick={startNewGame}>Start</Button>
+						) : (
+							""
+						)}
 					</div>
 				</div>
 			</div>

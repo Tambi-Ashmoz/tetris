@@ -19,7 +19,7 @@ import {
 	rotatePieceToLeft,
 } from "./Tetris.logic";
 
-export enum GameState {
+export enum State {
 	RESET,
 	PLAY,
 	PAUSE,
@@ -29,8 +29,8 @@ export enum GameState {
 interface Props {
 	onLineComplete: any;
 	linesToAddFromEnd: number[][];
-	gameState: GameState;
-	setGameState: Dispatch<SetStateAction<GameState>>;
+	state: State;
+	setState: Dispatch<SetStateAction<State>>;
 }
 
 const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
@@ -51,7 +51,7 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	useEffect(() => {
 		if (isGameOver == true) {
 			setPollingTime(0);
-			props.setGameState(GameState.GAME_OVER);
+			props.setState(State.GAME_OVER);
 		}
 	}, [isGameOver]);
 
@@ -84,24 +84,24 @@ const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	}, [props.linesToAddFromEnd]);
 
 	useEffect(() => {
-		switch (props.gameState) {
-			case GameState.RESET:
+		switch (props.state) {
+			case State.RESET:
 				resetGame();
 				break;
 
-			case GameState.PLAY:
+			case State.PLAY:
 				setPollingTime(1000);
 				break;
 
-			case GameState.PAUSE:
+			case State.PAUSE:
 				setPollingTime(0);
 				break;
 
-			case GameState.GAME_OVER:
+			case State.GAME_OVER:
 				setIsGameOver(true);
 				break;
 		}
-	}, [props.gameState]);
+	}, [props.state]);
 
 	const setPieceXY = (x: number, y: number) => {
 		if (isCanPutPieceOnBoard(board, pieceSlide, x, y) == true) {
