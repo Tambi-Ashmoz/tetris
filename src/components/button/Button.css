@@ -4,7 +4,12 @@
 	justify-content: center;
 	outline: none;
 	cursor: pointer;
-	background-image: linear-gradient(to top, #d8d9db 0%, #fff 80%, #fdfdfd 100%);
+	background-image: linear-gradient(
+		to top,
+		#d8d9db 0%,
+		#fff 80%,
+		#fdfdfd 100%
+	);
 	border-radius: 100em;
 	border: 1px solid #8f9092;
 	box-shadow: 0 4px 3px 1px #fcfcfc, 0 6px 8px #d6d7d9, 0 -4px 4px #cecfd1,
@@ -13,6 +18,8 @@
 	text-shadow: 0 1px #fff;
 	transition: all 0.2s ease;
 	padding: 0.5em 1em 0.5em 1em;
+	box-sizing: border-box;
+	margin: 3px;
 }
 
 .btn:active {

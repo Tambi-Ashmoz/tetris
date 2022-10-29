@@ -1,50 +1,23 @@
-import React, { useEffect, useReducer } from "react";
-import { Game, PlayerSide } from "../game/Game";
-import { Init } from "../init/Init";
-
-interface GameReducerState {
-	page: JSX.Element;
-	playerSide: PlayerSide;
-}
-
-enum GameReducerActions {
-	ConnectingToServer,
-	PlayingGame,
-}
-
-const gameReducer = (
-	state: GameReducerState,
-	action:
-		| { type: GameReducerActions.ConnectingToServer }
-		| { type: GameReducerActions.PlayingGame; playerSide: PlayerSide }
-): any => {
-	switch (action.type) {
-		case GameReducerActions.ConnectingToServer:
-			return { ...state, page: <Init /> };
-
-		case GameReducerActions.PlayingGame:
-			return { ...state, page: <Game playerSide={action.playerSide} /> };
-
-		default:
-			return state;
-	}
-};
+import React, { useEffect, useState } from "react";
+import { Game } from "../game/Game";
+import { Players } from "../players/Players";
 
 interface Props {}
 
 export const Home: React.FC<Props> = (props: Props): JSX.Element => {
-	const [gameState, gameDispatch] = useReducer(gameReducer, {
-		page: <Init />,
-	});
+	const [page, setPage] = useState<JSX.Element>(<></>);
+
+	const [playerId, setPlayerId] = useState<string | null>(null);
 
 	useEffect(() => {
-		setTimeout(() => {
-			gameDispatch({
-				type: GameReducerActions.PlayingGame,
-				playerSide: 1,
-			});
-		}, 2200);
+		setPage(<Players setPlayerId={setPlayerId} />);
 	}, []);
 
-	return <>{gameState.page}</>;
+	useEffect(() => {
+		if (playerId != null) {
+			setPage(<Game playerSide={1} />);
+		}
+	}, [playerId]);
+
+	return <>{page}</>;
 };
