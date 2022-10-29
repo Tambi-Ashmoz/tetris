@@ -11,7 +11,8 @@ interface GameReducerState {
 }
 
 enum GameReducerActions {
-	StartingGame,
+	WaitingToStartGame,
+	CountDownToStartGame,
 	PlayingGame,
 	GameOver,
 }
@@ -21,7 +22,10 @@ const gameReducer = (
 	action: { type: GameReducerActions; value: any }
 ): any => {
 	switch (action.type) {
-		case GameReducerActions.StartingGame:
+		case GameReducerActions.WaitingToStartGame:
+			return { ...state };
+
+		case GameReducerActions.CountDownToStartGame:
 			return { ...state };
 
 		case GameReducerActions.PlayingGame:
@@ -40,7 +44,7 @@ interface Props {
 }
 
 export const Game: React.FC<Props> = (props: Props): JSX.Element => {
-	const [gameState, gameDispatch] = useReducer(gameReducer, { a: 0 });
+	const [gameState, gameDispatch] = useReducer(gameReducer, null);
 
 	const [tetrisALinesCompleted, setTetrisALinesCompleted] = useState<
 		number[][]
