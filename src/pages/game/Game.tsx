@@ -4,7 +4,11 @@ import { Tetris, TetrisState } from "../../components/tetris/Tetris";
 
 enum GameState {
 	WaitingToStartGame = "WaitingToStartGame",
-	CountDownToStartGame = "CountDownToStartGame",
+	ResetGame = "ResetGame",
+	CountDown3 = "CountDown3",
+	CountDown2 = "CountDown2",
+	CountDown1 = "CountDown1",
+	Go = "Go",
 	PlayingGame = "PlayingGame",
 	GameOver = "GameOver",
 }
@@ -30,20 +34,43 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 				setTettrisBState(TetrisState.Reset);
 				break;
 
-			case GameState.CountDownToStartGame:
+			case GameState.ResetGame:
 				setWinner(0);
 
 				setTettrisAState(TetrisState.Reset);
 				setTettrisBState(TetrisState.Reset);
 
+				setGameState(GameState.CountDown3);
+				break;
+
+			case GameState.CountDown3:
+				setTimeout(() => {
+					setGameState(GameState.CountDown2);
+				}, 1000);
+				break;
+
+			case GameState.CountDown2:
+				setTimeout(() => {
+					setGameState(GameState.CountDown1);
+				}, 1000);
+				break;
+
+			case GameState.CountDown1:
+				setTimeout(() => {
+					setGameState(GameState.Go);
+				}, 1000);
+				break;
+
+			case GameState.Go:
+				setTettrisAState(TetrisState.Play);
+				setTettrisBState(TetrisState.Play);
+
 				setTimeout(() => {
 					setGameState(GameState.PlayingGame);
-				}, 3000);
+				}, 1000);
 				break;
 
 			case GameState.PlayingGame:
-				setTettrisAState(TetrisState.Play);
-				setTettrisBState(TetrisState.Play);
 				break;
 
 			case GameState.GameOver:
@@ -69,7 +96,7 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 	}, [tetrisBState]);
 
 	const startNewGame = () => {
-		setGameState(GameState.CountDownToStartGame);
+		setGameState(GameState.ResetGame);
 	};
 
 	return (
@@ -103,7 +130,10 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 				<div className="row">
 					<div className="col hor-align-center margin-top-1">
 						<h3>
-							{gameState == GameState.CountDownToStartGame ? "Get Ready..." : ""}
+							{gameState == GameState.CountDown3 ? "Get Ready 3" : ""}
+							{gameState == GameState.CountDown2 ? "Get Ready 2" : ""}
+							{gameState == GameState.CountDown1 ? "Get Ready 1" : ""}
+							{gameState == GameState.Go ? "Go !" : ""}
 							{winner == 1 ? "Player 1 Wins!" : ""}
 							{winner == 2 ? "Player 2 Wins!" : ""}
 						</h3>
