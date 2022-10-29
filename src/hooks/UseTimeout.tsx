@@ -19,7 +19,7 @@ export const useTimeout = (
 
 	useEffect(() => {
 		if (timeout <= 0) {
-			timeout = 0;
+			return;
 		}
 
 		if (interval <= 0) {
