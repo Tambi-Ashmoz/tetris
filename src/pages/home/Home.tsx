@@ -43,7 +43,7 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 				type: GameReducerActions.PlayingGame,
 				playerSide: 1,
 			});
-		}, 2500);
+		}, 2300);
 	}, []);
 
 	return <>{gameState.page}</>;
