@@ -15,7 +15,7 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 
 	useEffect(() => {
 		if (playerId != null) {
-			setPage(<Game playerSide={1} />);
+			setPage(<Game />);
 		}
 	}, [playerId]);
 

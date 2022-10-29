@@ -20,10 +20,10 @@ import {
 } from "./Tetris.logic";
 
 export enum TetrisState {
-	RESET,
-	PLAY,
-	PAUSE,
-	GAME_OVER,
+	Reset = "Reset",
+	Play = "Play",
+	Pause = "Pause",
+	GameOver = "GameOver",
 }
 
 interface Props {
@@ -52,7 +52,7 @@ export const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 	useEffect(() => {
 		if (isGameOver == true) {
 			setPollingTime(0);
-			props.setState(TetrisState.GAME_OVER);
+			props.setState(TetrisState.GameOver);
 		}
 	}, [isGameOver]);
 
@@ -62,22 +62,11 @@ export const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 
 	useEffect(() => {
 		if (isGameOver === false && props.linesToAddFromEnd.length > 0) {
-			const newLinesWithEmptySpots = generateRandomLines(
-				board,
-				props.linesToAddFromEnd.length
-			);
+			const newLinesWithEmptySpots = generateRandomLines(board, props.linesToAddFromEnd.length);
 
-			const newBoardWithLines = addBoardLinesFromEnd(
-				board,
-				newLinesWithEmptySpots
-			);
+			const newBoardWithLines = addBoardLinesFromEnd(board, newLinesWithEmptySpots);
 
-			const newBoard = putPieceOnBoard(
-				newBoardWithLines,
-				pieceSlide,
-				pieceSlideX,
-				pieceSlideY
-			);
+			const newBoard = putPieceOnBoard(newBoardWithLines, pieceSlide, pieceSlideX, pieceSlideY);
 
 			setBoard(newBoardWithLines);
 			setBoardToDisplay(newBoard);
@@ -86,19 +75,19 @@ export const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 
 	useEffect(() => {
 		switch (props.state) {
-			case TetrisState.RESET:
+			case TetrisState.Reset:
 				resetGame();
 				break;
 
-			case TetrisState.PLAY:
+			case TetrisState.Play:
 				setPollingTime(1000);
 				break;
 
-			case TetrisState.PAUSE:
+			case TetrisState.Pause:
 				setPollingTime(0);
 				break;
 
-			case TetrisState.GAME_OVER:
+			case TetrisState.GameOver:
 				setIsGameOver(true);
 				break;
 		}
@@ -137,18 +126,10 @@ export const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 
 		const newPiece = rotatePieceToLeft(pieceSlide);
 
-		if (
-			isCanPutPieceOnBoard(board, newPiece, pieceSlideX, pieceSlideY) ==
-			true
-		) {
+		if (isCanPutPieceOnBoard(board, newPiece, pieceSlideX, pieceSlideY) == true) {
 			setPieceSlide(newPiece);
 
-			const newBoard = putPieceOnBoard(
-				board,
-				newPiece,
-				pieceSlideX,
-				pieceSlideY
-			);
+			const newBoard = putPieceOnBoard(board, newPiece, pieceSlideX, pieceSlideY);
 			setBoardToDisplay(newBoard);
 		}
 	};
@@ -158,25 +139,13 @@ export const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 			return;
 		}
 
-		if (
-			isCanPutPieceOnBoard(
-				board,
-				pieceSlide,
-				pieceSlideX,
-				pieceSlideY + 1
-			) === true
-		) {
+		if (isCanPutPieceOnBoard(board, pieceSlide, pieceSlideX, pieceSlideY + 1) === true) {
 			setPieceXY(pieceSlideX, pieceSlideY + 1);
 		} else if (pieceSlideY === 0) {
 			setIsGameOver(true);
 		} else {
 			//freeze pieceSlide on the back board
-			const newBoard = putPieceOnBoard(
-				board,
-				pieceSlide,
-				pieceSlideX,
-				pieceSlideY
-			);
+			const newBoard = putPieceOnBoard(board, pieceSlide, pieceSlideX, pieceSlideY);
 
 			//count full lines
 			const fullLines = getBoardFullLines(newBoard);
@@ -242,12 +211,7 @@ export const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 
 		setBoard(newBoard);
 
-		const newBoardToDisplay = putPieceOnBoard(
-			newBoard,
-			newPieceSlide,
-			newPieceSlideX,
-			newPieceSlideY
-		);
+		const newBoardToDisplay = putPieceOnBoard(newBoard, newPieceSlide, newPieceSlideX, newPieceSlideY);
 
 		setBoardToDisplay(newBoardToDisplay);
 	};
@@ -273,11 +237,7 @@ export const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 							</div>
 							<div className="row">
 								<div className="col hor-align-center">
-									<Lines
-										completedLinesAmount={
-											completedLinesAmount
-										}
-									/>
+									<Lines completedLinesAmount={completedLinesAmount} />
 								</div>
 							</div>
 
