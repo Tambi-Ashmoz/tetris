@@ -133,7 +133,7 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 						{winner != 0 ? (
 							<Button onClick={startNewGame}>Start</Button>
 						) : (
-							""
+							<></>
 						)}
 					</div>
 				</div>
