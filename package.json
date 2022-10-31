@@ -8,12 +8,16 @@
 		"build": "tsc && vite build",
 		"preview": "vite preview",
 		"dev-host": "npm run dev -- --host",
-		"build-preview": "npm run build && vite preview"
+		"build-preview": "npm run build && vite preview",
+		"client": "vite --host",
+		"server": "node ./src/server/server.js",
+		"clientAndServer": "run-p client server"
 	},
 	"dependencies": {
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"styled-components": "^5.3.6"
+		"styled-components": "^5.3.6",
+		"ws": "^8.10.0"
 	},
 	"devDependencies": {
 		"@types/react": "^18.0.17",
