@@ -15,16 +15,25 @@ wss.on("connection", (ws, req) => {
 
 	console.log("server: connected to client: " + ws.clientId + ", total clients: " + clients.length);
 
+	//helpers
+	const sendMessageToClient = (str) => {
+		ws.send(str);
+	};
+
+	const sendMessageToClients = (str) => {
+		wss.clients.forEach((client) => {
+			if (client.readyState === WebSocket.OPEN) {
+				client.send(str);
+			}
+		});
+	};
+
 	//send to the client his id and all available clients
 	const messageToClient = JSON.stringify({ action: "connected", clientId: ws.clientId });
-	ws.send(messageToClient);
+	sendMessageToClient(messageToClient);
 
-	const messageToAllCLients = JSON.stringify({ action: "connections", clients: clients });
-	wss.clients.forEach((client) => {
-		if (client.readyState === WebSocket.OPEN) {
-			client.send(messageToAllCLients);
-		}
-	});
+	const messageToClients = JSON.stringify({ action: "connections", clients: clients });
+	sendMessageToClients(messageToClients);
 
 	//on pong
 	ws.on("pong", () => {
@@ -45,12 +54,8 @@ wss.on("connection", (ws, req) => {
 					"server: connection lost with client: " + ws.clientId + ", total clients: " + clients.length
 				);
 
-				const messageToAllCLients = JSON.stringify({ action: "connections", clients: clients });
-				wss.clients.forEach((client) => {
-					if (client.readyState === WebSocket.OPEN) {
-						client.send(messageToAllCLients);
-					}
-				});
+				const messageToClients = JSON.stringify({ action: "connections", clients: clients });
+				sendMessageToClients(messageToClients);
 			}
 		}, 1 * 1000);
 	}, 5 * 1000);
@@ -79,7 +84,14 @@ wss.on("connection", (ws, req) => {
 
 		//send to all clients the message (except to himself)
 		switch (data.action) {
-			case "": {
+			case "readyToPlay": {
+				const messageToClients = JSON.stringify({
+					action: "readyToPlay",
+					player1: data.player1,
+					player2: data.player2,
+				});
+				sendMessageToClients(messageToClients);
+
 				break;
 			}
 		}

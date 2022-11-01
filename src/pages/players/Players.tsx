@@ -8,8 +8,6 @@ interface Props {
 }
 
 export const Players: React.FC<Props> = (props: Props): JSX.Element => {
-	console.log("--Players--");
-
 	const onClickPlayer = (player: string) => {
 		props.setPlayer2(player);
 	};

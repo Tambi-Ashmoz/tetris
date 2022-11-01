@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { Game } from "../game/Game";
 import { Players } from "../players/Players";
 
 const ws = new WebSocket("ws://localhost:80", ["soap", "wamp"]);
-// const ws = new WebSocket("ws://192.168.1.15:80", ["soap", "wamp"]);
+
+enum Pages {
+	Playes,
+	Game,
+}
 
 interface Props {}
 
 export const Home: React.FC<Props> = (props: Props): JSX.Element => {
-	const [page, setPage] = useState<JSX.Element>(<></>);
+	const [page, setPage] = useState<Pages>(Pages.Playes);
 
 	const [player1, setPlayer1] = useState<string>("");
 	const [player2, setPlayer2] = useState<string>("");
 	const [players, setPlayers] = useState<string[]>([]);
 
 	const [wsData, setWsData] = useState<any>({});
-
-	console.log("--Home--");
-	console.log("player1 " + player1);
-	console.log("player2 " + player2);
-	console.log("players " + players);
 
 	useEffect(() => {
 		console.log("client: connecting to server...");
@@ -32,7 +32,7 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 		};
 
 		ws.onmessage = (e) => {
-			console.log("client: received message from server");
+			console.log("client: received message from server " + e.data);
 
 			let data: any = {};
 
@@ -58,18 +58,17 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	useEffect(() => {
 		switch (wsData.action) {
 			case "connected":
-				console.log("connected");
-				console.log(wsData.clientId);
 				setPlayer1(wsData.clientId);
 				break;
 
 			case "connections":
-				console.log("connections");
-				console.log(player1);
-				console.log(wsData.clients);
-
 				const clients = wsData.clients.filter((item: string) => item != player1);
+
 				setPlayers([...clients]);
+				break;
+
+			case "readyToPlay":
+				setPage(Pages.Game);
 				break;
 
 			default:
@@ -77,20 +76,16 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 		}
 	}, [wsData]);
 
-	// useEffect(() => {
-	// 	setPage(<Players players={players} player1={player1} setPlayer2={setPlayer2} />);
-	// }, []);
+	useEffect(() => {
+		if (player2 != "") {
+			ws.send(JSON.stringify({ action: "readyToPlay", player1: player1, player2: player2 }));
+		}
+	}, [player2]);
 
-	// useEffect(() => {
-	// 	if (player2 != "") {
-	// 		setPage(<Game />);
-	// 	}
-	// }, [player2]);
-
-	// return <>{page}</>;
 	return (
 		<>
-			<Players players={players} player1={player1} setPlayer2={setPlayer2} />
+			{page == Pages.Playes ? <Players players={players} player1={player1} setPlayer2={setPlayer2} /> : <></>}
+			{page == Pages.Game ? <Game /> : <></>}
 		</>
 	);
 };
