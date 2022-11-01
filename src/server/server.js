@@ -58,7 +58,7 @@ wss.on("connection", (ws, req) => {
 				sendMessageToClients(messageToClients);
 			}
 		}, 1 * 1000);
-	}, 5 * 1000);
+	}, 1 * 1000);
 
 	//on error
 	ws.on("error", (e) => {

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useWebSocket } from "../../hooks/UseWebSocket";
 import { Game } from "../game/Game";
 import { Players } from "../players/Players";
-
-const webSocket = new WebSocket("ws://localhost:80", ["soap", "wamp"]);
 
 enum Pages {
 	Playes,
@@ -18,7 +17,7 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	const [player2, setPlayer2] = useState<string>("");
 	const [players, setPlayers] = useState<string[]>([]);
 
-	const [webSocketData, setWebSocketData] = useState<any>({});
+	const { webSocket, webSocketMessage } = useWebSocket("ws://localhost:80");
 
 	const [snapshot, setSnapshot] = useState<{ board: number[][]; next: number[][] }>({
 		board: [],
@@ -26,48 +25,13 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	});
 
 	useEffect(() => {
-		console.log("client: connecting to server...");
-
-		webSocket.onopen = (e) => {
-			console.log("client: connected to server");
-		};
-
-		webSocket.onerror = (e) => {
-			console.log("client: error", e);
-		};
-
-		webSocket.onmessage = (e) => {
-			console.log("client: received message from server " + e.data);
-
-			let data: any = {};
-
-			try {
-				data = JSON.parse(e.data);
-			} catch (error) {
-				console.log("client: error parsing message");
-			}
-
-			setWebSocketData(data);
-		};
-
-		webSocket.onclose = (e) => {
-			console.log("client: disconnected from success");
-		};
-
-		return () => {
-			console.log("client: closing connection");
-			webSocket.close();
-		};
-	}, []);
-
-	useEffect(() => {
-		switch (webSocketData.action) {
+		switch (webSocketMessage.action) {
 			case "connected":
-				setPlayer1(webSocketData.clientId);
+				setPlayer1(webSocketMessage.clientId);
 				break;
 
 			case "connections":
-				const clients = webSocketData.clients.filter((item: string) => item != player1);
+				const clients = webSocketMessage.clients.filter((item: string) => item != player1);
 
 				setPlayers([...clients]);
 				break;
@@ -77,9 +41,9 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 				break;
 
 			case "snapshot":
-				const player = webSocketData.player;
-				const board = webSocketData.board;
-				const next = webSocketData.next;
+				const player = webSocketMessage.player;
+				const board = webSocketMessage.board;
+				const next = webSocketMessage.next;
 
 				if (player == player2) {
 					setSnapshot({ board: board, next: next });
@@ -89,7 +53,7 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 			default:
 				break;
 		}
-	}, [webSocketData]);
+	}, [webSocketMessage]);
 
 	useEffect(() => {
 		if (player2 != "") {
