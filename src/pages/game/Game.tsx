@@ -3,13 +3,13 @@ import { Button } from "../../components/button/Button";
 import { Tetris, TetrisState } from "../../components/tetris/Tetris";
 
 enum GameState {
-	WaitingToStartGame = "WaitingToStartGame",
+	WaitingToStart = "WaitingToStart",
 	ResetGame = "ResetGame",
 	CountDown3 = "CountDown3",
 	CountDown2 = "CountDown2",
 	CountDown1 = "CountDown1",
 	Go = "Go",
-	PlayingGame = "PlayingGame",
+	Playing = "Playing",
 	GameOver = "GameOver",
 }
 
@@ -20,7 +20,7 @@ interface Props {
 }
 
 export const Game: React.FC<Props> = (props: Props): JSX.Element => {
-	const [gameState, setGameState] = useState<GameState>(GameState.WaitingToStartGame);
+	const [gameState, setGameState] = useState<GameState>(GameState.WaitingToStart);
 
 	const [tetrisALinesCompleted, setTetrisALinesCompleted] = useState<number[][]>([]);
 	const [tetrisBLinesCompleted, setTetrisBLinesCompleted] = useState<number[][]>([]);
@@ -42,7 +42,7 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 
 	useEffect(() => {
 		switch (gameState) {
-			case GameState.WaitingToStartGame:
+			case GameState.WaitingToStart:
 				setWinner(0);
 
 				setTettrisAState(TetrisState.Reset);
@@ -81,11 +81,11 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 				setTettrisBState(TetrisState.Play);
 
 				setTimeout(() => {
-					setGameState(GameState.PlayingGame);
+					setGameState(GameState.Playing);
 				}, 1000);
 				break;
 
-			case GameState.PlayingGame:
+			case GameState.Playing:
 				break;
 
 			case GameState.GameOver:
@@ -129,14 +129,14 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 						/>
 					</div>
 					<div className="col">
-						<Tetris
+						{/* <Tetris
 							onLineComplete={setTetrisBLinesCompleted}
 							linesToAddFromEnd={tetrisALinesCompleted}
 							state={tetrisBState}
 							setState={setTettrisBState}
 							isControlsEnabled={false}
 							snapshot={props.snapshot}
-						/>
+						/> */}
 					</div>
 				</div>
 				<div className="row">
@@ -147,10 +147,12 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 				<div className="row">
 					<div className="col hor-align-center margin-top-1">
 						<h3>
+							{gameState == GameState.WaitingToStart ? "Waiting To Start" : ""}
 							{gameState == GameState.CountDown3 ? "Get Ready 3" : ""}
 							{gameState == GameState.CountDown2 ? "Get Ready 2" : ""}
 							{gameState == GameState.CountDown1 ? "Get Ready 1" : ""}
 							{gameState == GameState.Go ? "Go !" : ""}
+							{gameState == GameState.Playing ? "Play !" : ""}
 							{winner == 1 ? "Player 1 Wins!" : ""}
 							{winner == 2 ? "Player 2 Wins!" : ""}
 						</h3>
@@ -158,7 +160,7 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 				</div>
 				<div className="row">
 					<div className="col hor-align-center margin-top-1">
-						{gameState == GameState.WaitingToStartGame || gameState == GameState.GameOver ? (
+						{gameState == GameState.WaitingToStart || gameState == GameState.GameOver ? (
 							<Button onClick={startNewGame}>Start</Button>
 						) : (
 							<></>
