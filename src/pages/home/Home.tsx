@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Game } from "../game/Game";
 import { Players } from "../players/Players";
 
-const ws = new WebSocket("ws://localhost:80", ["soap", "wamp"]);
+const webSocket = new WebSocket("ws://localhost:80", ["soap", "wamp"]);
 
 enum Pages {
 	Playes,
@@ -18,20 +18,20 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	const [player2, setPlayer2] = useState<string>("");
 	const [players, setPlayers] = useState<string[]>([]);
 
-	const [wsData, setWsData] = useState<any>({});
+	const [webSocketData, setWebSocketData] = useState<any>({});
 
 	useEffect(() => {
 		console.log("client: connecting to server...");
 
-		ws.onopen = (e) => {
+		webSocket.onopen = (e) => {
 			console.log("client: connected to server");
 		};
 
-		ws.onerror = (e) => {
+		webSocket.onerror = (e) => {
 			console.log("client: error", e);
 		};
 
-		ws.onmessage = (e) => {
+		webSocket.onmessage = (e) => {
 			console.log("client: received message from server " + e.data);
 
 			let data: any = {};
@@ -42,27 +42,27 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 				console.log("client: error parsing message");
 			}
 
-			setWsData(data);
+			setWebSocketData(data);
 		};
 
-		ws.onclose = (e) => {
+		webSocket.onclose = (e) => {
 			console.log("client: disconnected from success");
 		};
 
 		return () => {
 			console.log("client: closing connection");
-			ws.close();
+			webSocket.close();
 		};
 	}, []);
 
 	useEffect(() => {
-		switch (wsData.action) {
+		switch (webSocketData.action) {
 			case "connected":
-				setPlayer1(wsData.clientId);
+				setPlayer1(webSocketData.clientId);
 				break;
 
 			case "connections":
-				const clients = wsData.clients.filter((item: string) => item != player1);
+				const clients = webSocketData.clients.filter((item: string) => item != player1);
 
 				setPlayers([...clients]);
 				break;
@@ -74,18 +74,18 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 			default:
 				break;
 		}
-	}, [wsData]);
+	}, [webSocketData]);
 
 	useEffect(() => {
 		if (player2 != "") {
-			ws.send(JSON.stringify({ action: "readyToPlay", player1: player1, player2: player2 }));
+			webSocket.send(JSON.stringify({ action: "readyToPlay", player1: player1, player2: player2 }));
 		}
 	}, [player2]);
 
 	return (
 		<>
 			{page == Pages.Playes ? <Players players={players} player1={player1} setPlayer2={setPlayer2} /> : <></>}
-			{page == Pages.Game ? <Game /> : <></>}
+			{page == Pages.Game ? <Game webSocket={webSocket} /> : <></>}
 		</>
 	);
 };

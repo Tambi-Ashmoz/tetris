@@ -13,7 +13,9 @@ enum GameState {
 	GameOver = "GameOver",
 }
 
-interface Props {}
+interface Props {
+	webSocket: WebSocket;
+}
 
 export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 	const [gameState, setGameState] = useState<GameState>(GameState.WaitingToStartGame);
