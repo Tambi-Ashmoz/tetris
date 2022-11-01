@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useWebSocket } from "../../hooks/UseWebSocket";
-import { Game } from "../game/Game";
+import { Players } from "../players/Players";
+import { War } from "../war/War";
 
 enum Pages {
 	Playes,
-	Game,
+	War,
 }
 
 interface Props {}
@@ -17,11 +18,6 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	const [players, setPlayers] = useState<string[]>([]);
 
 	const { webSocketMessage, webSocketSend } = useWebSocket("ws://localhost:80");
-
-	const [snapshot, setSnapshot] = useState<{ board: number[][]; next: number[][] }>({
-		board: [],
-		next: [],
-	});
 
 	useEffect(() => {
 		switch (webSocketMessage.action) {
@@ -36,35 +32,25 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 				break;
 
 			case "readyToPlay":
-				setPage(Pages.Game);
-				break;
-
-			case "snapshot":
-				const player = webSocketMessage.player;
-				const board = webSocketMessage.board;
-				const next = webSocketMessage.next;
-
-				if (player == player2) {
-					setSnapshot({ board: board, next: next });
-				}
-				break;
-
-			default:
+				setPage(Pages.War);
 				break;
 		}
 	}, [webSocketMessage]);
 
 	useEffect(() => {
 		if (player2 != "") {
-			webSocketSend(JSON.stringify({ action: "readyToPlay", player1: player1, player2: player2 }));
+			webSocketSend({ action: "readyToPlay", player1: player1, player2: player2 });
 		}
 	}, [player2]);
 
 	return (
 		<>
-			{/* {page == Pages.Playes ? <Players players={players} player1={player1} setPlayer2={setPlayer2} /> : <></>} */}
-			{/* {page == Pages.Game ? <Game webSocket={webSocket} player={player1} snapshot={snapshot} /> : <></>} */}
-			{<Game webSocketSend={webSocketSend} player={player1} snapshot={snapshot} />}
+			{page == Pages.Playes ? <Players players={players} player1={player1} setPlayer2={setPlayer2} /> : <></>}
+			{page == Pages.War ? (
+				<War player={player1} webSocketMessage={webSocketMessage} webSocketSend={webSocketSend} />
+			) : (
+				<></>
+			)}
 		</>
 	);
 };

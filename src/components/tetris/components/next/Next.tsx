@@ -2,11 +2,12 @@ import React from "react";
 import { Box } from "../box/Box";
 
 interface Props {
-	pieceNext: number[][];
+	next: number[][];
 }
 
 export const Next: React.FC<Props> = (props: Props): JSX.Element => {
-	const { pieceNext } = props;
+	const { next } = props;
+
 	return (
 		<>
 			<div className="mat">
@@ -18,7 +19,7 @@ export const Next: React.FC<Props> = (props: Props): JSX.Element => {
 				<div className="row">
 					<div className="col">
 						<div className="mat next">
-							{pieceNext.map((row, i) => (
+							{next.map((row, i) => (
 								<div key={i} className="row">
 									{row.map((col, j) => (
 										<div key={j} className="col">

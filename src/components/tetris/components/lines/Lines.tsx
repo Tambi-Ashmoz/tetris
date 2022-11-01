@@ -1,11 +1,12 @@
 import React from "react";
 
 interface Props {
-	completedLinesAmount: number;
+	lines: number;
 }
 
 export const Lines: React.FC<Props> = (props: Props): JSX.Element => {
-	const { completedLinesAmount } = props;
+	const { lines } = props;
+
 	return (
 		<>
 			<div className="mat">
@@ -16,7 +17,7 @@ export const Lines: React.FC<Props> = (props: Props): JSX.Element => {
 				</div>
 				<div className="row">
 					<div className="col hor-align-center">
-						<h3>{completedLinesAmount}</h3>
+						<h3>{lines}</h3>
 					</div>
 				</div>
 			</div>

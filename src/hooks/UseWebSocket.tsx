@@ -8,8 +8,8 @@ export const useWebSocket = (url: string) => {
 	const [webSocketError, setWebSocketError] = useState<any>();
 	const [webSocketMessage, setWebSockMessage] = useState<any>({});
 
-	const webSocketSend = (message: string) => {
-		webSocket?.send(message);
+	const webSocketSend = (message: {}) => {
+		webSocket?.send(JSON.stringify(message));
 	};
 
 	useEffect(() => {

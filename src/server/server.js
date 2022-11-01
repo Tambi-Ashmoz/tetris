@@ -80,7 +80,9 @@ wss.on("connection", (ws, req) => {
 			console.log("server: error parsing message from client: " + ws.clientId);
 		}
 
-		console.log("server: message from client: " + ws.clientId + ", " + message);
+		console.log(
+			"server: message from client: " + ws.clientId + ", " + JSON.stringify(data).substring(0, 50) + " ..."
+		);
 
 		//send to all clients the message (except to himself)
 		switch (data.action) {
@@ -96,12 +98,7 @@ wss.on("connection", (ws, req) => {
 			}
 
 			case "snapshot": {
-				const messageToClients = JSON.stringify({
-					action: "snapshot",
-					player: data.player,
-					board: data.board,
-					next: data.next,
-				});
+				const messageToClients = JSON.stringify(data);
 				sendMessageToClients(messageToClients);
 
 				break;
