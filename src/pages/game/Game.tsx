@@ -15,6 +15,8 @@ enum GameState {
 
 interface Props {
 	webSocket: WebSocket;
+	player: string;
+	snapshot: { board: number[][]; next: number[][] };
 }
 
 export const Game: React.FC<Props> = (props: Props): JSX.Element => {
@@ -26,6 +28,17 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 	const [tetrisBState, setTettrisBState] = useState<TetrisState>(TetrisState.Reset);
 
 	const [winner, setWinner] = useState<number>(0);
+
+	const [snapshot, setSnapshot] = useState<{ board: number[][]; next: number[][] }>({
+		board: [],
+		next: [],
+	});
+
+	useEffect(() => {
+		props.webSocket.send(
+			JSON.stringify({ action: "snapshot", player: props.player, board: snapshot.board, next: snapshot.next })
+		);
+	}, [snapshot]);
 
 	useEffect(() => {
 		switch (gameState) {
@@ -112,6 +125,7 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 							state={tetrisAState}
 							setState={setTettrisAState}
 							isControlsEnabled={true}
+							setSnapshot={setSnapshot}
 						/>
 					</div>
 					<div className="col">
@@ -121,6 +135,7 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 							state={tetrisBState}
 							setState={setTettrisBState}
 							isControlsEnabled={false}
+							snapshot={props.snapshot}
 						/>
 					</div>
 				</div>

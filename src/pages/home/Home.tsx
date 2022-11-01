@@ -20,6 +20,11 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 
 	const [webSocketData, setWebSocketData] = useState<any>({});
 
+	const [snapshot, setSnapshot] = useState<{ board: number[][]; next: number[][] }>({
+		board: [],
+		next: [],
+	});
+
 	useEffect(() => {
 		console.log("client: connecting to server...");
 
@@ -71,6 +76,16 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 				setPage(Pages.Game);
 				break;
 
+			case "snapshot":
+				const player = webSocketData.player;
+				const board = webSocketData.board;
+				const next = webSocketData.next;
+
+				if (player == player2) {
+					setSnapshot({ board: board, next: next });
+				}
+				break;
+
 			default:
 				break;
 		}
@@ -85,7 +100,7 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	return (
 		<>
 			{page == Pages.Playes ? <Players players={players} player1={player1} setPlayer2={setPlayer2} /> : <></>}
-			{page == Pages.Game ? <Game webSocket={webSocket} /> : <></>}
+			{page == Pages.Game ? <Game webSocket={webSocket} player={player1} snapshot={snapshot} /> : <></>}
 		</>
 	);
 };

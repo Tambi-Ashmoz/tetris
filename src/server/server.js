@@ -94,6 +94,18 @@ wss.on("connection", (ws, req) => {
 
 				break;
 			}
+
+			case "snapshot": {
+				const messageToClients = JSON.stringify({
+					action: "snapshot",
+					player: data.player,
+					board: data.board,
+					next: data.next,
+				});
+				sendMessageToClients(messageToClients);
+
+				break;
+			}
 		}
 	});
 });

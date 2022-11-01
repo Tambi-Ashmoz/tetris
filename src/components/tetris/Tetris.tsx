@@ -32,6 +32,8 @@ interface Props {
 	state: TetrisState;
 	setState: Dispatch<SetStateAction<TetrisState>>;
 	isControlsEnabled: boolean;
+	setSnapshot?: React.Dispatch<React.SetStateAction<{ board: number[][]; next: number[][] }>>;
+	snapshot?: { board: number[][]; next: number[][] };
 }
 
 export const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
@@ -92,6 +94,19 @@ export const Tetris: React.FC<Props> = (props: Props): JSX.Element => {
 				break;
 		}
 	}, [props.state]);
+
+	useEffect(() => {
+		// if (props.setSnapshot) {
+		// 	props.setSnapshot({ board: boardToDisplay, next: pieceNext });
+		// }
+	}, [boardToDisplay, pieceNext]);
+
+	useEffect(() => {
+		// if (props.snapshot) {
+		// 	setBoardToDisplay(props.snapshot.board);
+		// 	setPieceNext(props.snapshot.next);
+		// }
+	}, [props.snapshot]);
 
 	const setPieceXY = (x: number, y: number) => {
 		if (isCanPutPieceOnBoard(board, pieceSlide, x, y) == true) {
