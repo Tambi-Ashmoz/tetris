@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useWebSocket } from "../../hooks/UseWebSocket";
 import { Game } from "../game/Game";
-import { Players } from "../players/Players";
 
 enum Pages {
 	Playes,
@@ -17,7 +16,7 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	const [player2, setPlayer2] = useState<string>("");
 	const [players, setPlayers] = useState<string[]>([]);
 
-	const { webSocket, webSocketMessage } = useWebSocket("ws://localhost:80");
+	const { webSocketMessage, webSocketSend } = useWebSocket("ws://localhost:80");
 
 	const [snapshot, setSnapshot] = useState<{ board: number[][]; next: number[][] }>({
 		board: [],
@@ -57,14 +56,15 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 
 	useEffect(() => {
 		if (player2 != "") {
-			webSocket.send(JSON.stringify({ action: "readyToPlay", player1: player1, player2: player2 }));
+			webSocketSend(JSON.stringify({ action: "readyToPlay", player1: player1, player2: player2 }));
 		}
 	}, [player2]);
 
 	return (
 		<>
-			{page == Pages.Playes ? <Players players={players} player1={player1} setPlayer2={setPlayer2} /> : <></>}
-			{page == Pages.Game ? <Game webSocket={webSocket} player={player1} snapshot={snapshot} /> : <></>}
+			{/* {page == Pages.Playes ? <Players players={players} player1={player1} setPlayer2={setPlayer2} /> : <></>} */}
+			{/* {page == Pages.Game ? <Game webSocket={webSocket} player={player1} snapshot={snapshot} /> : <></>} */}
+			{<Game webSocketSend={webSocketSend} player={player1} snapshot={snapshot} />}
 		</>
 	);
 };

@@ -14,7 +14,7 @@ enum GameState {
 }
 
 interface Props {
-	webSocket: WebSocket;
+	webSocketSend: (message: string) => void;
 	player: string;
 	snapshot: { board: number[][]; next: number[][] };
 }
@@ -35,7 +35,7 @@ export const Game: React.FC<Props> = (props: Props): JSX.Element => {
 	});
 
 	useEffect(() => {
-		props.webSocket.send(
+		props.webSocketSend(
 			JSON.stringify({ action: "snapshot", player: props.player, board: snapshot.board, next: snapshot.next })
 		);
 	}, [snapshot]);

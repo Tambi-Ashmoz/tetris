@@ -8,6 +8,10 @@ export const useWebSocket = (url: string) => {
 	const [webSocketError, setWebSocketError] = useState<any>();
 	const [webSocketMessage, setWebSockMessage] = useState<any>({});
 
+	const webSocketSend = (message: string) => {
+		webSocket?.send(message);
+	};
+
 	useEffect(() => {
 		const ws = new WebSocket(url, ["soap", "wamp"]);
 
@@ -43,10 +47,10 @@ export const useWebSocket = (url: string) => {
 	}, []);
 
 	return {
-		webSocket,
 		webSocketOpen,
 		webSocketClose,
 		webSocketError,
 		webSocketMessage,
+		webSocketSend,
 	};
 };
