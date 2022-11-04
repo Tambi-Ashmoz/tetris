@@ -24,23 +24,23 @@ export const Controls: React.FC<Props> = (props: Props): JSX.Element => {
 							<div className="row">
 								<div className="col"></div>
 								<div className="col" onClick={onClickUp}>
-									<Box color={1} />
+									<Box color={-1}>&uarr;</Box>
 								</div>
 								<div className="col"></div>
 							</div>
 							<div className="row">
 								<div className="col" onClick={onClickLeft}>
-									<Box color={1} />
+									<Box color={-1}>&larr;</Box>
 								</div>
 								<div className="col"></div>
 								<div className="col" onClick={onClickRight}>
-									<Box color={1} />
+									<Box color={-1}>&rarr;</Box>
 								</div>
 							</div>
 							<div className="row">
 								<div className="col"></div>
 								<div className="col" onClick={onClickDown}>
-									<Box color={1} />
+									<Box color={-1}>&darr;</Box>
 								</div>
 								<div className="col"></div>
 							</div>
