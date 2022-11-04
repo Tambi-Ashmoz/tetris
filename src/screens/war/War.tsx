@@ -24,13 +24,13 @@ enum WarState {
 }
 
 interface Props {
-	player: string;
+	playerId: string;
 	webSocketMessage: TypeWebSocketMessage;
 	webSocketSend: TypeWebSocketSend;
 }
 
 export const War: React.FC<Props> = (props: Props): JSX.Element => {
-	const { player, webSocketMessage, webSocketSend } = props;
+	const { playerId, webSocketMessage, webSocketSend } = props;
 
 	const [warState, setWarState] = useState<WarState>(WarState.Wait);
 	const [winner, setWinner] = useState<number>(0);
@@ -66,7 +66,7 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 	useEffect(() => {
 		webSocketSend({
 			action: TypeWebSocketMessageActions.Snapshot,
-			player: player,
+			playerId: playerId,
 			board: tetris1.board,
 			next: tetris1.next,
 			isGameOver: tetris1.isGameOver,
@@ -82,7 +82,7 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 
 		switch (webSocketMessage.action) {
 			case TypeWebSocketMessageActions.Snapshot:
-				if (webSocketMessage.player != player) {
+				if (webSocketMessage.playerId != playerId) {
 					tetris1.pushLines(webSocketMessage.linesCleared);
 
 					setTetris2({
@@ -96,11 +96,11 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 				if (webSocketMessage.isGameOver == true) {
 					stopWar();
 
-					if (webSocketMessage.player != player) {
+					if (webSocketMessage.playerId != playerId) {
 						setWinner(1);
 					}
 
-					if (webSocketMessage.player == player) {
+					if (webSocketMessage.playerId == playerId) {
 						setWinner(2);
 					}
 				}
@@ -138,7 +138,7 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 		<>
 			<div className="mat">
 				<div className="row">
-					<div className="col">Player: {player}</div>
+					<div className="col">Player: {playerId}</div>
 				</div>
 				<div className="row">
 					<div className="col">

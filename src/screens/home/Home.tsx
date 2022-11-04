@@ -14,22 +14,22 @@ interface Props {}
 export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	const [page, setPage] = useState<Screens>(Screens.Players);
 
-	const [player1, setPlayer1] = useState<string>("");
-	const [player2, setPlayer2] = useState<string>("");
-	const [players, setPlayers] = useState<string[]>([]);
+	const [playerId1, setPlayerId1] = useState<string>("");
+	const [playerId2, setPlayerId2] = useState<string>("");
+	const [playersIds, setPlayersIds] = useState<string[]>([]);
 
 	const { webSocketMessage, webSocketSend } = useWebSocket<TypeWebSocketMessage>("ws://localhost:80");
 
 	useEffect(() => {
 		switch (webSocketMessage.action) {
 			case TypeWebSocketMessageActions.Connected:
-				setPlayer1(webSocketMessage.clientId);
+				setPlayerId1(webSocketMessage.clientId);
 				break;
 
 			case TypeWebSocketMessageActions.Clients:
-				const clients = webSocketMessage.clients.filter((item: string) => item != player1);
+				const clients = webSocketMessage.clients.filter((clientId: string) => clientId != playerId1);
 
-				setPlayers([...clients]);
+				setPlayersIds([...clients]);
 				break;
 
 			case TypeWebSocketMessageActions.ReadyToPlay:
@@ -39,22 +39,22 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	}, [webSocketMessage]);
 
 	useEffect(() => {
-		if (player2 != "") {
-			webSocketSend({ action: TypeWebSocketMessageActions.ReadyToPlay, player1: player1, player2: player2 });
+		if (playerId2 != "") {
+			webSocketSend({ action: TypeWebSocketMessageActions.ReadyToPlay, playerId1: playerId1, playerId2: playerId2 });
 		}
-	}, [player2]);
+	}, [playerId2]);
 
 	useEffect(() => {
-		if (players.indexOf(player2) == -1) {
-			setPlayer2("");
+		if (playersIds.indexOf(playerId2) == -1) {
+			setPlayerId2("");
 			setPage(Screens.Players);
 		}
-	}, [players]);
+	}, [playersIds]);
 
 	return (
 		<>
-			{page == Screens.Players ? <Players players={players} player1={player1} setPlayer2={setPlayer2} /> : <></>}
-			{page == Screens.War ? <War player={player1} webSocketMessage={webSocketMessage} webSocketSend={webSocketSend} /> : <></>}
+			{page == Screens.Players ? <Players playersIds={playersIds} playerId1={playerId1} setPlayerId2={setPlayerId2} /> : <></>}
+			{page == Screens.War ? <War playerId={playerId1} webSocketMessage={webSocketMessage} webSocketSend={webSocketSend} /> : <></>}
 		</>
 	);
 };
