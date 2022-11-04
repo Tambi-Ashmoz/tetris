@@ -186,6 +186,7 @@ export const useTetris = () => {
 		isGameOver: isGameOver,
 		lines: completedLinesAmount,
 		linesCleared: linesCleared,
+		setLinesCleared: setLinesCleared,
 
 		state: state,
 		setState: setState,

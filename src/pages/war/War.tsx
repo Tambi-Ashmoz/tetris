@@ -97,6 +97,8 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 			linesCleared: tetris1.linesCleared,
 			warState: warState,
 		});
+
+		tetris1.setLinesCleared(0);
 	}, [warState, tetris1.board, tetris1.next, tetris1.isGameOver, tetris1.lines, tetris1.linesCleared]);
 
 	useEffect(() => {
