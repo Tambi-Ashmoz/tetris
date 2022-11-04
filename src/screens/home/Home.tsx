@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useWebSocket } from "../../hooks/UseWebSocket";
+import { WebSocketActions } from "../../types/WebSocketTypes";
 import { Players } from "../players/Players";
 import { War } from "../war/War";
 
@@ -21,17 +22,17 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 
 	useEffect(() => {
 		switch (webSocketMessage.action) {
-			case "connected":
+			case WebSocketActions.Connected:
 				setPlayer1(webSocketMessage.clientId);
 				break;
 
-			case "connections":
+			case WebSocketActions.Clients:
 				const clients = webSocketMessage.clients.filter((item: string) => item != player1);
 
 				setPlayers([...clients]);
 				break;
 
-			case "readyToPlay":
+			case WebSocketActions.ReadyToPlay:
 				setPage(Screens.War);
 				break;
 		}
@@ -39,7 +40,7 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 
 	useEffect(() => {
 		if (player2 != "") {
-			webSocketSend({ action: "readyToPlay", player1: player1, player2: player2 });
+			webSocketSend({ action: WebSocketActions.ReadyToPlay, player1: player1, player2: player2 });
 		}
 	}, [player2]);
 

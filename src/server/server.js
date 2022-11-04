@@ -30,10 +30,10 @@ wss.on("connection", (ws, req) => {
 	};
 
 	//send to the client his id and all available clients
-	const messageToClient = JSON.stringify({ action: "connected", clientId: ws.clientId });
+	const messageToClient = JSON.stringify({ action: "handshake", clientId: ws.clientId });
 	sendMessageToClient(messageToClient);
 
-	const messageToClients = JSON.stringify({ action: "connections", clients: clients });
+	const messageToClients = JSON.stringify({ action: "clients", clients: clients });
 	sendMessageToClients(messageToClients);
 
 	//on pong
@@ -53,7 +53,7 @@ wss.on("connection", (ws, req) => {
 				const clients = [...wss.clients].map((e) => e.clientId);
 				console.log("server: connection lost with client: " + ws.clientId + ", total clients: " + clients.length);
 
-				const messageToClients = JSON.stringify({ action: "connections", clients: clients });
+				const messageToClients = JSON.stringify({ action: "clients", clients: clients });
 				sendMessageToClients(messageToClients);
 			}
 		}, 1 * 1000);
