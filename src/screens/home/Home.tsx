@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useWebSocket } from "../../hooks/UseWebSocket";
-import { WebSocketActions } from "../../types/WebSocketTypes";
+import { TypeWebSocketMessage, TypeWebSocketMessageActions } from "../../types/WebSocketTypes";
 import { Players } from "../players/Players";
 import { War } from "../war/War";
 
@@ -18,21 +18,21 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	const [player2, setPlayer2] = useState<string>("");
 	const [players, setPlayers] = useState<string[]>([]);
 
-	const { webSocketMessage, webSocketSend } = useWebSocket("ws://localhost:80");
+	const { webSocketMessage, webSocketSend } = useWebSocket<TypeWebSocketMessage>("ws://localhost:80");
 
 	useEffect(() => {
 		switch (webSocketMessage.action) {
-			case WebSocketActions.Connected:
+			case TypeWebSocketMessageActions.Connected:
 				setPlayer1(webSocketMessage.clientId);
 				break;
 
-			case WebSocketActions.Clients:
+			case TypeWebSocketMessageActions.Clients:
 				const clients = webSocketMessage.clients.filter((item: string) => item != player1);
 
 				setPlayers([...clients]);
 				break;
 
-			case WebSocketActions.ReadyToPlay:
+			case TypeWebSocketMessageActions.ReadyToPlay:
 				setPage(Screens.War);
 				break;
 		}
@@ -40,7 +40,7 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 
 	useEffect(() => {
 		if (player2 != "") {
-			webSocketSend({ action: WebSocketActions.ReadyToPlay, player1: player1, player2: player2 });
+			webSocketSend({ action: TypeWebSocketMessageActions.ReadyToPlay, player1: player1, player2: player2 });
 		}
 	}, [player2]);
 

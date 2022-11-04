@@ -8,13 +8,13 @@ export interface TypeWebSocketMessage {
 	[key: string]: any;
 }
 
-export const useWebSocket = (url: string) => {
+export const useWebSocket = <TypeWebSocketMessageCustom,>(url: string) => {
 	const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
 
 	const [webSocketOpen, setWebSocketOpen] = useState();
 	const [webSocketClose, setWebSocketClose] = useState();
 	const [webSocketError, setWebSocketError] = useState();
-	const [webSocketMessage, setWebSockMessage] = useState<TypeWebSocketMessage>({});
+	const [webSocketMessage, setWebSockMessage] = useState<TypeWebSocketMessage | TypeWebSocketMessageCustom>({});
 
 	const webSocketSend: TypeWebSocketSend = (message: {}) => {
 		webSocket?.send(JSON.stringify(message));

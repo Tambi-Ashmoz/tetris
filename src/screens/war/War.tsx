@@ -4,7 +4,7 @@ import { Button } from "../../components/button/Button";
 import { Tetris } from "../../components/tetris/Tetris";
 import { TetrisState, useTetris } from "../../hooks/UseTetris";
 import { TypeWebSocketMessage, TypeWebSocketSend } from "../../hooks/UseWebSocket";
-import { WebSocketActions } from "../../types/WebSocketTypes";
+import { TypeWebSocketMessageActions } from "../../types/WebSocketTypes";
 
 const YouLose = styled.div`
 	color: #bb0000;
@@ -51,21 +51,21 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 				break;
 
 			case WarState.Start:
-				webSocketSend({ action: WebSocketActions.Start });
+				webSocketSend({ action: TypeWebSocketMessageActions.Start });
 				break;
 
 			case WarState.Play:
 				break;
 
 			case WarState.End:
-				webSocketSend({ action: WebSocketActions.End });
+				webSocketSend({ action: TypeWebSocketMessageActions.End });
 				break;
 		}
 	}, [warState]);
 
 	useEffect(() => {
 		webSocketSend({
-			action: WebSocketActions.Snapshot,
+			action: TypeWebSocketMessageActions.Snapshot,
 			player: player,
 			board: tetris1.board,
 			next: tetris1.next,
@@ -81,7 +81,7 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 		// console.log(webSocketMessage.action);
 
 		switch (webSocketMessage.action) {
-			case WebSocketActions.Snapshot:
+			case TypeWebSocketMessageActions.Snapshot:
 				if (webSocketMessage.player != player) {
 					tetris1.pushLines(webSocketMessage.linesCleared);
 
@@ -107,7 +107,7 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 
 				break;
 
-			case WebSocketActions.Start:
+			case TypeWebSocketMessageActions.Start:
 				setWarState(WarState.Start);
 
 				tetris1.setState(TetrisState.Reset);
@@ -119,7 +119,7 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 				}, 2000);
 				break;
 
-			case WebSocketActions.End:
+			case TypeWebSocketMessageActions.End:
 				tetris1.setState(TetrisState.Pause);
 				setWarState(WarState.Wait);
 				break;
