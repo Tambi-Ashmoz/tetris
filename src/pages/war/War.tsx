@@ -37,8 +37,6 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 	});
 
 	useEffect(() => {
-		console.count("bbb " + warState);
-
 		switch (warState) {
 			case WarState.WaitingToStart:
 				tetris1.setState(TetrisState.Reset);
