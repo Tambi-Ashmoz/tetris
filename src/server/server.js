@@ -4,11 +4,12 @@
 import { WebSocket, WebSocketServer } from "ws";
 
 const wss = new WebSocketServer({ port: 80 });
+let clientIdCountr = 0;
 
 wss.on("connection", (ws, req) => {
 	//settings
 	ws.isAlive = true;
-	ws.clientId = new Date().getTime();
+	ws.clientId = clientIdCountr++;
 
 	//get all clients
 	const clients = [...wss.clients].map((e) => e.clientId);
