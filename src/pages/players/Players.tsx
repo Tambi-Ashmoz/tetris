@@ -17,12 +17,12 @@ export const Players: React.FC<Props> = (props: Props): JSX.Element => {
 			<div className="mat">
 				<div className="row">
 					<div className="col">
-						<h3>Player:</h3>
+						<h3>Player: {props.player1}</h3>
 					</div>
 				</div>
 				<div className="row">
 					<div className="col">
-						<div>{props.player1}</div>
+						<Button onClick={() => onClickPlayer("0")}>Practice</Button>
 					</div>
 				</div>
 				<div className="row">
