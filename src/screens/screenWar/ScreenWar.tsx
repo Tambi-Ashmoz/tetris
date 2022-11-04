@@ -29,7 +29,7 @@ interface Props {
 	webSocketSend: TypeWebSocketSend;
 }
 
-export const War: React.FC<Props> = (props: Props): JSX.Element => {
+export const ScreenWar: React.FC<Props> = (props: Props): JSX.Element => {
 	const { playerId, webSocketMessage, webSocketSend } = props;
 
 	const [warState, setWarState] = useState<WarState>(WarState.Wait);

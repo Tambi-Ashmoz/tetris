@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useWebSocket } from "../../hooks/UseWebSocket";
 import { TypeWebSocketMessage, TypeWebSocketMessageActions } from "../../types/WebSocketTypes";
-import { Players } from "../players/Players";
-import { War } from "../war/War";
+import { ScreenPlayers } from "../screenPlayers/ScreenPlayers";
+import { ScreenWar } from "../screenWar/ScreenWar";
 
 enum Screens {
 	Players,
@@ -11,7 +11,7 @@ enum Screens {
 
 interface Props {}
 
-export const Home: React.FC<Props> = (props: Props): JSX.Element => {
+export const ScreenHome: React.FC<Props> = (props: Props): JSX.Element => {
 	const [screen, setScreen] = useState<Screens>(Screens.Players);
 
 	const [playerId1, setPlayerId1] = useState<string>("");
@@ -53,8 +53,8 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 
 	return (
 		<>
-			{screen == Screens.Players ? <Players playersIds={playersIds} playerId1={playerId1} setPlayerId2={setPlayerId2} /> : <></>}
-			{screen == Screens.War ? <War playerId={playerId1} webSocketMessage={webSocketMessage} webSocketSend={webSocketSend} /> : <></>}
+			{screen == Screens.Players ? <ScreenPlayers playersIds={playersIds} playerId1={playerId1} setPlayerId2={setPlayerId2} /> : <></>}
+			{screen == Screens.War ? <ScreenWar playerId={playerId1} webSocketMessage={webSocketMessage} webSocketSend={webSocketSend} /> : <></>}
 		</>
 	);
 };

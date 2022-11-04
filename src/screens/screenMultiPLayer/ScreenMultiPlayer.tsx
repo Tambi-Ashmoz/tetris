@@ -7,7 +7,7 @@ interface Props {
 	playersIds: string[];
 }
 
-export const Players: React.FC<Props> = (props: Props): JSX.Element => {
+export const ScreenPlayers: React.FC<Props> = (props: Props): JSX.Element => {
 	const onClickPlayer = (player: string) => {
 		props.setPlayerId2(player);
 	};
