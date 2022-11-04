@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import { Button } from "../../components/button/Button";
 import { Tetris } from "../../components/tetris/Tetris";
 import { TetrisState, useTetris } from "../../hooks/UseTetris";
@@ -15,6 +16,16 @@ interface Props {
 	webSocketMessage: any;
 	webSocketSend: (message: {}) => void;
 }
+
+const YouLose = styled.div`
+	color: #bb0000;
+	text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+`;
+
+const YouWin = styled.div`
+	color: #00bb00;
+	text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #00e600, 0 0 40px #00e600, 0 0 50px #00e600, 0 0 60px #00e600, 0 0 70px #00e600;
+`;
 
 export const War: React.FC<Props> = (props: Props): JSX.Element => {
 	const { player, webSocketMessage, webSocketSend } = props;
@@ -154,8 +165,8 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 							{warState == WarState.Wait ? "" : ""}
 							{warState == WarState.Start ? "Ready ?" : ""}
 							{warState == WarState.Play ? "Play !" : ""}
-							{winner == 1 ? "You Win!" : ""}
-							{winner == 2 ? "You Lose!" : ""}
+							{winner == 1 ? <YouWin>You Win!</YouWin> : ""}
+							{winner == 2 ? <YouLose>You Lose!</YouLose> : ""}
 						</h3>
 					</div>
 				</div>
