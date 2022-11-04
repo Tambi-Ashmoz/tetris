@@ -22,7 +22,7 @@ export const Players: React.FC<Props> = (props: Props): JSX.Element => {
 				</div>
 				<div className="row">
 					<div className="col">
-						<Button onClick={() => onClickPlayer("0")}>Practice</Button>
+						<Button onClick={() => onClickPlayer("-1")}>Practice</Button>
 					</div>
 				</div>
 				<div className="row">

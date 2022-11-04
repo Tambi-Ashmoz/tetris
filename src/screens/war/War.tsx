@@ -4,10 +4,11 @@ import { Tetris } from "../../components/tetris/Tetris";
 import { TetrisState, useTetris } from "../../hooks/UseTetris";
 
 enum WarState {
-	Reset = 0,
-	Ready = 1,
+	Wait = 0,
+	Start = 1,
 	Play = 2,
 	WarOver = 3,
+	Restart = 4,
 }
 
 interface Props {
@@ -19,7 +20,7 @@ interface Props {
 export const War: React.FC<Props> = (props: Props): JSX.Element => {
 	const { player, webSocketMessage, webSocketSend } = props;
 
-	const [warState, setWarState] = useState<WarState>(WarState.Reset);
+	const [warState, setWarState] = useState<WarState>(WarState.Wait);
 	const [winner, setWinner] = useState<number>(0);
 
 	const tetris1 = useTetris();
@@ -33,17 +34,21 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 	});
 
 	useEffect(() => {
-		switch (warState) {
-			case WarState.Reset:
-				tetris1.setState(TetrisState.Reset);
+		console.log(winner);
+	}, [winner]);
 
-				setWinner(0);
+	useEffect(() => {
+		switch (warState) {
+			case WarState.Wait:
+				tetris1.setState(TetrisState.Pause);
 				break;
 
-			case WarState.Ready:
+			case WarState.Start:
+				tetris1.setState(TetrisState.Reset);
+				setWinner(0);
+
 				setTimeout(() => {
 					tetris1.setState(TetrisState.Play);
-
 					setWarState(WarState.Play);
 				}, 2000);
 				break;
@@ -76,7 +81,7 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 		switch (webSocketMessage.action) {
 			case "snapshot":
 				if (webSocketMessage.player != player) {
-					if (warState < webSocketMessage.warState || warState == WarState.WarOver) {
+					if (warState < webSocketMessage.warState || warState == WarState.Restart) {
 						setWarState(webSocketMessage.warState);
 					}
 
@@ -90,7 +95,7 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 					});
 				}
 
-				if (webSocketMessage.isGameOver == true) {
+				if (webSocketMessage.warState != WarState.Restart && webSocketMessage.isGameOver == true) {
 					stopWar();
 
 					if (webSocketMessage.player != player) {
@@ -106,11 +111,7 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 	}, [webSocketMessage]);
 
 	const startWar = () => {
-		setWarState(WarState.Reset);
-
-		setTimeout(() => {
-			setWarState(WarState.Ready);
-		}, 1000);
+		setWarState(WarState.Start);
 	};
 
 	const stopWar = () => {
@@ -120,6 +121,9 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 	return (
 		<>
 			<div className="mat">
+				<div className="row">
+					<div className="col">Player: {player}</div>
+				</div>
 				<div className="row">
 					<div className="col">
 						<Tetris
@@ -144,8 +148,8 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 				<div className="row">
 					<div className="col hor-align-center margin-top-1">
 						<h3>
-							{warState == WarState.Reset ? "" : ""}
-							{warState == WarState.Ready ? "Ready ?" : ""}
+							{warState == WarState.Wait ? "" : ""}
+							{warState == WarState.Start ? "Ready ?" : ""}
 							{warState == WarState.Play ? "Play !" : ""}
 							{winner == 1 ? "You Win!" : ""}
 							{winner == 2 ? "You Lose!" : ""}
@@ -154,8 +158,8 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 				</div>
 				<div className="row">
 					<div className="col hor-align-center margin-top-1">
-						{warState == WarState.Reset ? <Button onClick={startWar}>Start</Button> : <></>}
-						{warState == WarState.WarOver ? <Button onClick={startWar}>Start</Button> : <></>}
+						{warState == WarState.Wait ? <Button onClick={startWar}>Start</Button> : <></>}
+						{warState == WarState.WarOver ? <Button onClick={startWar}>Restart</Button> : <></>}
 					</div>
 				</div>
 			</div>
