@@ -46,11 +46,7 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	return (
 		<>
 			{page == Pages.Playes ? <Players players={players} player1={player1} setPlayer2={setPlayer2} /> : <></>}
-			{page == Pages.War ? (
-				<War player={player1} webSocketMessage={webSocketMessage} webSocketSend={webSocketSend} />
-			) : (
-				<></>
-			)}
+			{page == Pages.War ? <War player={player1} webSocketMessage={webSocketMessage} webSocketSend={webSocketSend} /> : <></>}
 		</>
 	);
 };

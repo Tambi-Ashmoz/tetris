@@ -128,12 +128,7 @@ export const useTetris = () => {
 			setPieceSlideY(newPieceSlideY);
 
 			//put pieceSlide on boardToDisplay
-			const newBoardToDisplay = putPieceOnBoard(
-				newBoardWithNoFullLines,
-				newPieceSlide,
-				newPieceSlideX,
-				newPieceSlideY
-			);
+			const newBoardToDisplay = putPieceOnBoard(newBoardWithNoFullLines, newPieceSlide, newPieceSlideX, newPieceSlideY);
 
 			//save new boardToDisplay
 			setBoardToDisplay(newBoardToDisplay);

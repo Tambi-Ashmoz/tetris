@@ -50,9 +50,7 @@ wss.on("connection", (ws, req) => {
 				clearInterval(interval);
 
 				const clients = [...wss.clients].map((e) => e.clientId);
-				console.log(
-					"server: connection lost with client: " + ws.clientId + ", total clients: " + clients.length
-				);
+				console.log("server: connection lost with client: " + ws.clientId + ", total clients: " + clients.length);
 
 				const messageToClients = JSON.stringify({ action: "connections", clients: clients });
 				sendMessageToClients(messageToClients);
@@ -80,9 +78,7 @@ wss.on("connection", (ws, req) => {
 			console.log("server: error parsing message from client: " + ws.clientId);
 		}
 
-		console.log(
-			"server: message from client: " + ws.clientId + ", " + JSON.stringify(data).substring(0, 50) + " ..."
-		);
+		console.log("server: message from client: " + ws.clientId + ", " + JSON.stringify(data).substring(0, 50) + " ...");
 
 		//send to all clients the message (except to himself)
 		switch (data.action) {
