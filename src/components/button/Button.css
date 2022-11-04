@@ -14,6 +14,7 @@
 	box-sizing: border-box;
 	margin: 3px;
 	min-width: 7em;
+	white-space: nowrap;
 }
 
 .btn:active {
