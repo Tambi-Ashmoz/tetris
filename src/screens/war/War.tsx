@@ -3,19 +3,7 @@ import styled from "styled-components";
 import { Button } from "../../components/button/Button";
 import { Tetris } from "../../components/tetris/Tetris";
 import { TetrisState, useTetris } from "../../hooks/UseTetris";
-
-enum WarState {
-	Wait,
-	Start,
-	Play,
-	End,
-}
-
-interface Props {
-	player: string;
-	webSocketMessage: any;
-	webSocketSend: (message: {}) => void;
-}
+import { TypeWebSocketMessage, TypeWebSocketSend } from "../../hooks/UseWebSocket";
 
 const YouLose = styled.div`
 	color: #bb0000;
@@ -26,6 +14,19 @@ const YouWin = styled.div`
 	color: #00bb00;
 	text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #00e600, 0 0 40px #00e600, 0 0 50px #00e600, 0 0 60px #00e600, 0 0 70px #00e600;
 `;
+
+enum WarState {
+	Wait,
+	Start,
+	Play,
+	End,
+}
+
+interface Props {
+	player: string;
+	webSocketMessage: TypeWebSocketMessage;
+	webSocketSend: TypeWebSocketSend;
+}
 
 export const War: React.FC<Props> = (props: Props): JSX.Element => {
 	const { player, webSocketMessage, webSocketSend } = props;

@@ -1,14 +1,23 @@
 import { useEffect, useState } from "react";
 
+export interface TypeWebSocketSend {
+	<T>(message: T): void;
+}
+
+export interface TypeWebSocketMessage {
+	action: string;
+	[key: string]: any;
+}
+
 export const useWebSocket = (url: string) => {
 	const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
 
 	const [webSocketOpen, setWebSocketOpen] = useState<any>();
 	const [webSocketClose, setWebSocketClose] = useState<any>();
 	const [webSocketError, setWebSocketError] = useState<any>();
-	const [webSocketMessage, setWebSockMessage] = useState<any>({});
+	const [webSocketMessage, setWebSockMessage] = useState<TypeWebSocketMessage>({ action: "" });
 
-	const webSocketSend = (message: {}) => {
+	const webSocketSend: TypeWebSocketSend = <T,>(message: T) => {
 		webSocket?.send(JSON.stringify(message));
 	};
 
