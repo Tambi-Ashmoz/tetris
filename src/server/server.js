@@ -81,20 +81,9 @@ wss.on("connection", (ws, req) => {
 
 		console.log("server: message from client: " + ws.clientId + ", " + JSON.stringify(data).substring(0, 50) + " ...");
 
-		//send to all clients the message (except to himself)
+		//send to all clients the message
 		switch (data.action) {
-			case "readyToPlay": {
-				const messageToClients = JSON.stringify({
-					action: "readyToPlay",
-					player1: data.player1,
-					player2: data.player2,
-				});
-				sendMessageToClients(messageToClients);
-
-				break;
-			}
-
-			case "snapshot": {
+			default: {
 				const messageToClients = JSON.stringify(data);
 				sendMessageToClients(messageToClients);
 

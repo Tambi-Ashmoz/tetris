@@ -38,21 +38,14 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 				break;
 
 			case WarState.Start:
-				tetris1.setState(TetrisState.Reset);
-				setWinner(0);
-
-				setTimeout(() => {
-					tetris1.setState(TetrisState.Play);
-					setWarState(WarState.Play);
-				}, 2000);
+				webSocketSend({ action: "start" });
 				break;
 
 			case WarState.Play:
 				break;
 
 			case WarState.End:
-				tetris1.setState(TetrisState.Pause);
-				setWarState(WarState.Wait);
+				webSocketSend({ action: "end" });
 				break;
 		}
 	}, [warState]);
@@ -66,22 +59,17 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 			isGameOver: tetris1.isGameOver,
 			lines: tetris1.lines,
 			linesCleared: tetris1.linesCleared,
-			warState: warState,
 		});
 
 		tetris1.setLinesCleared(0);
-	}, [warState, tetris1.board, tetris1.next, tetris1.isGameOver, tetris1.lines, tetris1.linesCleared]);
+	}, [tetris1.board, tetris1.next, tetris1.isGameOver, tetris1.lines, tetris1.linesCleared]);
 
 	useEffect(() => {
-		console.log(webSocketMessage.warState);
+		// console.log(webSocketMessage.action);
 
 		switch (webSocketMessage.action) {
 			case "snapshot":
 				if (webSocketMessage.player != player) {
-					if (warState < webSocketMessage.warState || warState == WarState.End) {
-						setWarState(webSocketMessage.warState);
-					}
-
 					tetris1.pushLines(webSocketMessage.linesCleared);
 
 					setTetris2({
@@ -103,6 +91,24 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 						setWinner(2);
 					}
 				}
+
+				break;
+
+			case "start":
+				setWarState(WarState.Start);
+
+				tetris1.setState(TetrisState.Reset);
+				setWinner(0);
+
+				setTimeout(() => {
+					tetris1.setState(TetrisState.Play);
+					setWarState(WarState.Play);
+				}, 2000);
+				break;
+
+			case "end":
+				tetris1.setState(TetrisState.Pause);
+				setWarState(WarState.Wait);
 				break;
 		}
 	}, [webSocketMessage]);
@@ -154,10 +160,7 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 					</div>
 				</div>
 				<div className="row">
-					<div className="col hor-align-center margin-top-1">
-						{warState == WarState.Wait ? <Button onClick={startWar}>Start</Button> : <></>}
-						{warState == WarState.End ? <Button onClick={startWar}>Start</Button> : <></>}
-					</div>
+					<div className="col hor-align-center margin-top-1">{warState == WarState.Wait ? <Button onClick={startWar}>Start</Button> : <></>}</div>
 				</div>
 			</div>
 		</>
