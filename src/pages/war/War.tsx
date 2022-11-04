@@ -178,11 +178,7 @@ export const War: React.FC<Props> = (props: Props): JSX.Element => {
 				</div>
 				<div className="row">
 					<div className="col hor-align-center margin-top-1">
-						{warState == WarState.WaitingToStart || warState == WarState.WarOver ? (
-							<Button onClick={startWar}>Start</Button>
-						) : (
-							<></>
-						)}
+						{warState == WarState.WaitingToStart || warState == WarState.WarOver ? <Button onClick={startWar}>Start</Button> : <></>}
 					</div>
 				</div>
 			</div>
