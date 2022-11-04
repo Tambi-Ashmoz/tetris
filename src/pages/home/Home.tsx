@@ -4,14 +4,14 @@ import { Players } from "../players/Players";
 import { War } from "../war/War";
 
 enum Pages {
-	Playes,
+	Players,
 	War,
 }
 
 interface Props {}
 
 export const Home: React.FC<Props> = (props: Props): JSX.Element => {
-	const [page, setPage] = useState<Pages>(Pages.Playes);
+	const [page, setPage] = useState<Pages>(Pages.Players);
 
 	const [player1, setPlayer1] = useState<string>("");
 	const [player2, setPlayer2] = useState<string>("");
@@ -38,6 +38,13 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 	}, [webSocketMessage]);
 
 	useEffect(() => {
+		if (players.indexOf(player2) == -1) {
+			setPlayer2("");
+			setPage(Pages.Players);
+		}
+	}, [players]);
+
+	useEffect(() => {
 		if (player2 != "") {
 			webSocketSend({ action: "readyToPlay", player1: player1, player2: player2 });
 		}
@@ -45,7 +52,7 @@ export const Home: React.FC<Props> = (props: Props): JSX.Element => {
 
 	return (
 		<>
-			{page == Pages.Playes ? <Players players={players} player1={player1} setPlayer2={setPlayer2} /> : <></>}
+			{page == Pages.Players ? <Players players={players} player1={player1} setPlayer2={setPlayer2} /> : <></>}
 			{page == Pages.War ? <War player={player1} webSocketMessage={webSocketMessage} webSocketSend={webSocketSend} /> : <></>}
 		</>
 	);

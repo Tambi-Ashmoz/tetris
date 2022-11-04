@@ -36,6 +36,8 @@ export const useWebSocket = (url: string) => {
 				//do nothing
 			}
 
+			console.log(JSON.stringify(data));
+
 			setWebSockMessage(data);
 		};
 
