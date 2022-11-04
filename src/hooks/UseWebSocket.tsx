@@ -1,23 +1,22 @@
 import { useEffect, useState } from "react";
 
 export interface TypeWebSocketSend {
-	<T>(message: T): void;
+	(message: {}): void;
 }
 
 export interface TypeWebSocketMessage {
-	action: string;
 	[key: string]: any;
 }
 
 export const useWebSocket = (url: string) => {
 	const [webSocket, setWebSocket] = useState<WebSocket | null>(null);
 
-	const [webSocketOpen, setWebSocketOpen] = useState<any>();
-	const [webSocketClose, setWebSocketClose] = useState<any>();
-	const [webSocketError, setWebSocketError] = useState<any>();
-	const [webSocketMessage, setWebSockMessage] = useState<TypeWebSocketMessage>({ action: "" });
+	const [webSocketOpen, setWebSocketOpen] = useState();
+	const [webSocketClose, setWebSocketClose] = useState();
+	const [webSocketError, setWebSocketError] = useState();
+	const [webSocketMessage, setWebSockMessage] = useState<TypeWebSocketMessage>({});
 
-	const webSocketSend: TypeWebSocketSend = <T,>(message: T) => {
+	const webSocketSend: TypeWebSocketSend = (message: {}) => {
 		webSocket?.send(JSON.stringify(message));
 	};
 
@@ -25,15 +24,15 @@ export const useWebSocket = (url: string) => {
 		const ws = new WebSocket(url, ["soap", "wamp"]);
 
 		ws.onopen = () => {
-			setWebSocketOpen(null);
+			setWebSocketOpen(undefined);
 		};
 
 		ws.onclose = (e) => {
-			setWebSocketClose(null);
+			setWebSocketClose(undefined);
 		};
 
 		ws.onerror = (e) => {
-			setWebSocketError(null);
+			setWebSocketError(undefined);
 		};
 
 		ws.onmessage = (e) => {
