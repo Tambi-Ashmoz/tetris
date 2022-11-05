@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export const usePolling = (callback: () => void, pollingTime: number) => {
 	const callbackRef = useRef(callback);

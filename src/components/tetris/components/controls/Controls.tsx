@@ -10,6 +10,7 @@ interface Props {
 
 export const Controls: React.FC<Props> = (props: Props): JSX.Element => {
 	const { onClickUp, onClickLeft, onClickDown, onClickRight } = props;
+
 	return (
 		<>
 			<div className="mat">
