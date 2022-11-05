@@ -5,7 +5,7 @@ const colors = ["box-empty", "box-yellow", "box-green", "box-red", "box-purple",
 
 interface Props {
 	color: number;
-	children?: React.ReactNode;
+	children: React.ReactNode;
 }
 
 export const Box: React.FC<Props> = (props: Props): JSX.Element => {
