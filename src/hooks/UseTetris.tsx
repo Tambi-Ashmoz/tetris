@@ -27,17 +27,6 @@ export const useTetris = () => {
 	const [linesCleared, setLinesCleared] = useState<number>(0);
 
 	useEffect(() => {
-		if (isGameOver == true) {
-			setPollingTime(0);
-			setState(TetrisState.Pause);
-		}
-	}, [isGameOver]);
-
-	usePolling(() => {
-		onClickDown();
-	}, pollingTime);
-
-	useEffect(() => {
 		switch (state) {
 			case TetrisState.Reset:
 				resetGame();
@@ -52,6 +41,17 @@ export const useTetris = () => {
 				break;
 		}
 	}, [state]);
+
+	usePolling(() => {
+		onClickDown();
+	}, pollingTime);
+
+	useEffect(() => {
+		if (isGameOver == true) {
+			setPollingTime(0);
+			setState(TetrisState.Pause);
+		}
+	}, [isGameOver]);
 
 	const setPieceXY = (x: number, y: number) => {
 		if (isCanPutPieceOnBoard(board, pieceSlide, x, y) == true) {
