@@ -9,7 +9,7 @@ interface Props {
 export const Button: React.FC<Props> = (props: Props): JSX.Element => {
 	return (
 		<>
-			<div className="btn padding-1" onClick={props.onClick}>
+			<div className="btn" onClick={props.onClick}>
 				{props.children}
 			</div>
 		</>
