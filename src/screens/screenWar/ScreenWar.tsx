@@ -78,8 +78,6 @@ export const ScreenWar: React.FC<Props> = (props: Props): JSX.Element => {
 	}, [tetris1.board, tetris1.next, tetris1.isGameOver, tetris1.lines, tetris1.linesCleared]);
 
 	useEffect(() => {
-		// console.log(webSocketMessage.action);
-
 		switch (webSocketMessage.action) {
 			case TypeWebSocketMessageActions.Snapshot:
 				if (webSocketMessage.playerId != playerId) {
