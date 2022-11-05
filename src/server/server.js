@@ -34,7 +34,9 @@ wss.on("connection", (ws, req) => {
 	sendMessageToClient(messageToClient);
 
 	const messageToClients = JSON.stringify({ action: "clients", clients: clients });
-	sendMessageToClients(messageToClients);
+	setTimeout(() => {
+		sendMessageToClients(messageToClients);
+	}, 1);
 
 	//on pong
 	ws.on("pong", () => {

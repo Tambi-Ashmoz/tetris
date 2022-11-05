@@ -41,7 +41,7 @@ export const useWebSocket = <TypeWebSocketMessageCustom,>(url: string) => {
 			try {
 				data = JSON.parse(e.data);
 			} catch (error) {
-				//do nothing
+				data = { error: error };
 			}
 
 			setWebSockMessage(data);
