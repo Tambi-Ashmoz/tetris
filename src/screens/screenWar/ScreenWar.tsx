@@ -4,7 +4,7 @@ import { Button } from "../../components/button/Button";
 import { Tetris } from "../../components/tetris/Tetris";
 import { TetrisState, useTetris } from "../../hooks/UseTetris";
 import { TypeWebSocketMessage, TypeWebSocketSend } from "../../hooks/UseWebSocket";
-import { TypeWebSocketMessageActions } from "../../types/WebSocketTypes";
+import { TypeWebSocketMessageActions } from "../../types/TypeWebSocket";
 
 const YouLose = styled.div`
 	color: #bb0000;

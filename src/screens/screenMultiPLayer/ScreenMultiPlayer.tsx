@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useWebSocket } from "../../hooks/UseWebSocket";
-import { TypeWebSocketMessage, TypeWebSocketMessageActions } from "../../types/WebSocketTypes";
+import { TypeWebSocketMessage, TypeWebSocketMessageActions } from "../../types/TypeWebSocket";
 import { ScreenPlayers } from "../screenPlayers/ScreenPlayers";
 import { ScreenWar } from "../screenWar/ScreenWar";
 
