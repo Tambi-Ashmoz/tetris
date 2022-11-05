@@ -1,43 +1,64 @@
-import React from "react";
-import { Button } from "../../components/button/Button";
+import React, { useEffect, useState } from "react";
+import { useWebSocket } from "../../hooks/UseWebSocket";
+import { TypeWebSocketMessage, TypeWebSocketMessageActions } from "../../types/WebSocketTypes";
+import { ScreenPlayers } from "../screenPlayers/ScreenPlayers";
+import { ScreenWar } from "../screenWar/ScreenWar";
 
-interface Props {
-	playerId1: string;
-	setPlayerId2: React.Dispatch<React.SetStateAction<string>>;
-	playersIds: string[];
+enum Screens {
+	Players,
+	War,
 }
 
-export const ScreenPlayers: React.FC<Props> = (props: Props): JSX.Element => {
-	const onClickPlayer = (player: string) => {
-		props.setPlayerId2(player);
+interface Props {}
+
+export const ScreenMultiPlayer: React.FC<Props> = (props: Props): JSX.Element => {
+	const [screen, setScreen] = useState<Screens>(Screens.Players);
+
+	const [playerId1, setPlayerId1] = useState<string>("");
+	const [playerId2, setPlayerId2] = useState<string>("");
+	const [playersIds, setPlayersIds] = useState<string[]>([]);
+
+	const { webSocketMessage, webSocketSend } = useWebSocket<TypeWebSocketMessage>("ws://localhost:80");
+
+	const onSelectPlayer = (playerId: string) => {
+		setPlayerId2(playerId);
 	};
+
+	useEffect(() => {
+		switch (webSocketMessage.action) {
+			case TypeWebSocketMessageActions.Connected:
+				setPlayerId1(webSocketMessage.clientId);
+				break;
+
+			case TypeWebSocketMessageActions.Clients:
+				const clients = webSocketMessage.clients.filter((clientId: string) => clientId != playerId1);
+
+				setPlayersIds([...clients]);
+				break;
+
+			case TypeWebSocketMessageActions.ReadyToPlay:
+				setScreen(Screens.War);
+				break;
+		}
+	}, [webSocketMessage]);
+
+	useEffect(() => {
+		if (playerId2 != "") {
+			webSocketSend({ action: TypeWebSocketMessageActions.ReadyToPlay, playerId1: playerId1, playerId2: playerId2 });
+		}
+	}, [playerId2]);
+
+	useEffect(() => {
+		if (playersIds.indexOf(playerId2) == -1) {
+			setPlayerId2("");
+			setScreen(Screens.Players);
+		}
+	}, [playersIds]);
 
 	return (
 		<>
-			<div className="mat">
-				<div className="row">
-					<div className="col">
-						<h3>Player: {props.playerId1}</h3>
-					</div>
-				</div>
-				<div className="row">
-					<div className="col">
-						<Button onClick={() => onClickPlayer("-1")}>Practice</Button>
-					</div>
-				</div>
-				<div className="row">
-					<div className="col">
-						<h3>Players online: {props.playersIds.length}</h3>
-					</div>
-				</div>
-				{props.playersIds.map((item, i, arr) => (
-					<div className="row" key={i}>
-						<div className="col">
-							<Button onClick={() => onClickPlayer(item)}>{item}</Button>
-						</div>
-					</div>
-				))}
-			</div>
+			{screen == Screens.Players ? <ScreenPlayers playersIds={playersIds} playerId1={playerId1} onSelectPlayer={onSelectPlayer} /> : <></>}
+			{screen == Screens.War ? <ScreenWar playerId={playerId1} webSocketMessage={webSocketMessage} webSocketSend={webSocketSend} /> : <></>}
 		</>
 	);
 };
