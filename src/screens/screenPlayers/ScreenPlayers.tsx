@@ -3,13 +3,13 @@ import { Button } from "../../components/button/Button";
 
 interface Props {
 	playerId1: string;
-	setPlayerId2: React.Dispatch<React.SetStateAction<string>>;
 	playersIds: string[];
+	onSelectPlayer: (playerId: string) => void;
 }
 
-export const Players: React.FC<Props> = (props: Props): JSX.Element => {
-	const onClickPlayer = (player: string) => {
-		props.setPlayerId2(player);
+export const ScreenPlayers: React.FC<Props> = (props: Props): JSX.Element => {
+	const onClickPlayer = (playerId: string) => {
+		props.onSelectPlayer(playerId);
 	};
 
 	return (
@@ -18,11 +18,6 @@ export const Players: React.FC<Props> = (props: Props): JSX.Element => {
 				<div className="row">
 					<div className="col">
 						<h3>Player: {props.playerId1}</h3>
-					</div>
-				</div>
-				<div className="row">
-					<div className="col">
-						<Button onClick={() => onClickPlayer("-1")}>Practice</Button>
 					</div>
 				</div>
 				<div className="row">
