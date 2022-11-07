@@ -23,12 +23,6 @@
 			"type": "node-terminal"
 		},
 		{
-			"command": "npm run dev",
-			"name": "run dev",
-			"request": "launch",
-			"type": "node-terminal"
-		},
-		{
 			"name": "run edge",
 			"request": "launch",
 			"type": "msedge",
